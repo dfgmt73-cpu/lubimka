@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Для Моей Самой Самой ❤️</title>
+    <title>Красочный Квест для Любимки ❤️</title>
     <style>
+        /* Яркий, сочный и красочный фон с абстрактными кругами */
         body {
             margin: 0;
             padding: 0;
@@ -12,116 +13,137 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffccd5;
+            background-image: 
+                radial-gradient(at 0% 0%, #ff758f 0px, transparent 50%),
+                radial-gradient(at 100% 0%, #70e000 0px, transparent 50%),
+                radial-gradient(at 100% 100%, #4cc9f0 0px, transparent 50%),
+                radial-gradient(at 0% 100%, #ffb703 0px, transparent 50%),
+                radial-gradient(at 50% 50%, #f72585 0px, transparent 50%);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             overflow-x: hidden;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
-        /* Карточка входа */
+        /* Эстетичная стеклянная карточка (Glassmorphism) */
         .card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(224, 93, 117, 0.15);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 35px 25px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
             text-align: center;
             width: 100%;
-            max-width: 380px;
+            max-width: 430px;
+            box-sizing: border-box;
             transition: all 0.5s ease;
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
-        .icon { font-size: 50px; margin-bottom: 15px; display: inline-block; }
-        h2 { color: #ff4d6d; margin-bottom: 10px; font-size: 24px; }
-        p.subtitle { color: #777; font-size: 14px; margin-bottom: 25px; line-height: 1.4; }
+        .icon { font-size: 55px; margin-bottom: 15px; display: inline-block; }
+        h2 { color: #ff1493; margin-top: 0; margin-bottom: 10px; font-size: 26px; text-shadow: 1px 1px 2px rgba(0,0,0,0.05); }
+        p.subtitle { color: #444; font-size: 15px; margin-bottom: 25px; line-height: 1.5; font-weight: 500; }
         
+        /* Кнопки и инпуты стали еще сочнее */
         input {
-            width: 100%; padding: 15px 20px; border: 2px solid #ffe5ec; border-radius: 50px;
+            width: 100%; padding: 16px 20px; border: 2.5px solid #ffccd5; border-radius: 50px;
             font-size: 16px; outline: none; box-sizing: border-box; transition: all 0.3s ease;
-            text-align: center; color: #555; margin-bottom: 20px;
+            text-align: center; color: #333; margin-bottom: 20px; font-weight: bold;
+            background: rgba(255, 255, 255, 0.9);
         }
-        input:focus { border-color: #ff758f; box-shadow: 0 0 10px rgba(255, 117, 143, 0.2); }
+        input:focus { border-color: #ff1493; box-shadow: 0 0 15px rgba(255, 20, 147, 0.2); }
         
         button {
-            width: 100%; padding: 15px; background: #ff4d6d; border: none; border-radius: 50px;
-            color: white; font-size: 16px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3); transition: all 0.3s ease;
+            width: 100%; padding: 16px; background: linear-gradient(45deg, #ff007f, #ff5e62);
+            border: none; border-radius: 50px; color: white; font-size: 16px; font-weight: bold;
+            cursor: pointer; box-shadow: 0 6px 20px rgba(255, 0, 127, 0.4); transition: all 0.3s ease;
         }
-        button:hover { background: #ff758f; transform: translateY(-2px); }
+        button:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(255, 0, 127, 0.5); }
+        button:active { transform: translateY(-1px); }
 
-        .hint-message { margin-top: 20px; font-size: 14px; color: #ff758f; min-height: 40px; line-height: 1.4; }
+        .hint-message { margin-top: 15px; font-size: 14px; color: #ff0055; min-height: 40px; line-height: 1.4; font-weight: bold; }
 
-        /* --- ИГРОВАЯ КАРТА (ЗМЕЙКА) --- */
-        #gameMap {
-            display: none; opacity: 0; transform: scale(0.9);
-            width: 100%; max-width: 450px; padding: 20px; box-sizing: border-box;
-        }
+        /* --- ЭКРАН ИНСТРУКЦИИ --- */
+        #instructionScreen { display: none; opacity: 0; transform: scale(0.9); }
+        .inst-text { text-align: left; background: rgba(255, 255, 255, 0.6); padding: 15px 20px; border-radius: 20px; margin-bottom: 25px; color: #333; font-size: 14px; line-height: 1.6; }
 
-        .snake-container {
-            display: flex; flex-direction: column; align-items: center; gap: 40px;
-            position: relative; margin-top: 30px;
-        }
-
-        /* Отрезки дорожки между подарками */
-        .snake-container::before {
-            content: ''; position: absolute; top: 30px; bottom: 30px; width: 6px;
-            background: dashed #ffccd5; z-index: 1;
+        /* --- ГОРИЗОНТАЛЬНАЯ ЗМЕЙКА (ЗИГЗАГ) --- */
+        #gameMap { display: none; opacity: 0; transform: scale(0.9); max-width: 480px; }
+        
+        .grid-snake {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 колонки в ряд */
+            gap: 25px 15px;
+            position: relative;
+            margin-top: 30px;
+            padding: 10px;
         }
 
         .gift-node {
-            display: flex; align-items: center; justify-content: center;
-            width: 80px; height: 80px; background: white; border-radius: 50px;
-            font-size: 35px; cursor: pointer; z-index: 2;
-            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.2);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 85px; background: white; border-radius: 24px;
+            font-size: 32px; cursor: pointer; position: relative;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
+            border: 2px solid transparent;
         }
 
-        /* Эффект змейки (смещение влево-вправо) */
-        .gift-node:nth-child(even) { transform: translateX(-60px); }
-        .gift-node:nth-child(odd) { transform: translateX(60px); }
-        .gift-node:nth-child(1) { transform: translateX(0); }
+        /* Порядок зигзага (чтобы шаги шли змейкой: 1->2->3, затем вниз на 4<-5<-6 и т.д.) */
+        .node-1 { grid-column: 1; }
+        .node-2 { grid-column: 2; }
+        .node-3 { grid-column: 3; }
+        .node-4 { grid-column: 3; } /* спускаемся на второй ряд справа */
+        .node-5 { grid-column: 2; }
+        .node-6 { grid-column: 1; }
+        .node-7 { grid-column: 1; } /* спускаемся на третий ряд слева */
+        .node-super { grid-column: 2 / span 2; background: linear-gradient(135deg, #ffe5ec, #fff); } /* супер-приз на 2 ячейки */
 
-        /* Состояния подарков */
-        .gift-node.locked {
-            background: #e0e0e0; cursor: not-allowed; opacity: 0.6; box-shadow: none;
-            pointer-events: none;
-        }
-        .gift-node.locked::after { content: '🔒'; position: absolute; font-size: 14px; bottom: 5px; right: 5px; }
-        .gift-node.active { border: 3px solid #ff4d6d; animation: pulse 1.5s infinite; }
-        .gift-node.opened { background: #ffe5ec; border: 2px solid #ff758f; }
+        /* Статусы шагов */
+        .gift-node.locked { background: rgba(200, 200, 200, 0.5); cursor: not-allowed; opacity: 0.5; pointer-events: none; }
+        .gift-node.locked::after { content: '🔒'; position: absolute; font-size: 12px; bottom: 8px; right: 8px; }
+        .gift-node.active { border-color: #ff007f; animation: pulse 1.4s infinite; background: #fff5f7; }
+        .gift-node.opened { background: #e8fff0; border-color: #2d6a4f; }
 
-        /* Номер шага */
+        .step-label { font-size: 11px; color: #666; font-weight: bold; margin-top: 4px; text-transform: uppercase; }
         .step-badge {
-            position: absolute; top: -10px; left: -10px; background: #ff4d6d;
-            color: white; font-size: 12px; width: 24px; height: 24px;
+            position: absolute; top: -8px; left: -8px; background: #ff007f;
+            color: white; font-size: 11px; width: 22px; height: 22px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;
         }
 
-        /* --- МОДАЛЬНОЕ ОКНО (ОКНО С ВОПРОСОМ) --- */
+        /* --- МОДАЛЬНОЕ ОКНО --- */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.4); z-index: 10; justify-content: center; align-items: center;
-            backdrop-filter: blur(4px);
+            background: rgba(0, 0, 0, 0.5); z-index: 10; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px); padding: 20px; box-sizing: border-box;
         }
         .modal-content {
-            background: white; padding: 30px; border-radius: 24px; width: 90%; max-width: 360px;
-            text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            animation: popUp 0.3s ease;
+            background: white; padding: 30px 20px; border-radius: 28px; width: 100%; max-width: 380px;
+            text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.15); animation: popUp 0.3s ease;
         }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .quiz-options { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
         .option-btn {
-            background: #fff5f7; color: #333; border: 2px solid #ffccd5; padding: 12px;
-            border-radius: 50px; cursor: pointer; font-size: 15px; transition: all 0.2s;
+            background: #fff5f7; color: #333; border: 2px solid #ffccd5; padding: 14px;
+            border-radius: 50px; cursor: pointer; font-size: 15px; font-weight: 500; transition: all 0.2s;
         }
-        .option-btn:hover { background: #ffe5ec; border-color: #ff4d6d; }
+        .option-btn:hover { background: #ffe5ec; border-color: #ff007f; }
         
-        .surprise-box { display: none; margin-top: 15px; padding: 15px; background: #f0fff4; border-radius: 16px; border: 1px dashed #2d6a4f; }
-        .surprise-box h4 { color: #2d6a4f; margin: 0 0 5px 0; }
-        .surprise-box p { color: #444; font-size: 14px; margin: 0; }
+        .surprise-box { display: none; margin-top: 15px; padding: 15px; background: #f0fff4; border-radius: 18px; border: 2px dashed #2d6a4f; }
+        .surprise-box h4 { color: #2d6a4f; margin: 0 0 8px 0; font-size: 16px; }
+        .surprise-box p { color: #333; font-size: 14px; margin: 0; line-height: 1.5; }
+
+        /* Дополнительные стили для Супер-приза */
+        .gift-node.super-prize { font-size: 40px; }
+        .gift-node.super-prize.active { background: linear-gradient(45deg, #ffb703, #ff007f); animation: superPulse 1.2s infinite; border: none; }
+        .gift-node.super-prize.active .step-label { color: white; }
 
         /* Анимации */
         @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
         .shake { animation: shake 0.4s ease-in-out; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.06); box-shadow: 0 10px 25px rgba(255, 0, 127, 0.3); } 100% { transform: scale(1); } }
+        @keyframes superPulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); box-shadow: 0 12px 30px rgba(255, 183, 3, 0.5); } 100% { transform: scale(1); } }
         @keyframes popUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
@@ -130,79 +152,89 @@
     <div class="card" id="loginCard">
         <div class="icon" id="icon">🔒</div>
         <h2>Доступ ограничен</h2>
-        <p class="subtitle">Пожалуйста, введи свое имя, чтобы подтвердить личность ❤️</p>
+        <p class="subtitle">Этот сайт создан специально для одной невероятной девушки. Пожалуйста, введи свое секретное имя ❤️</p>
         <input type="text" id="nameInput" placeholder="Кто ты, чудо? ✨" autocomplete="off">
         <button onclick="checkName()">Войти</button>
         <div class="hint-message" id="hintMessage"></div>
     </div>
 
-    <div id="gameMap">
-        <h2 style="text-align: center; margin-bottom: 5px;">Карта твоих сюрпризов 🗺️</h2>
-        <p class="subtitle" style="text-align: center; margin-bottom: 20px;">Нажимай на доступные подарки, отвечай на вопросы и забирай призы!</p>
+    <div class="card" id="instructionScreen">
+        <div class="icon">📜</div>
+        <h2>Важная инструкция!</h2>
+        <div class="inst-text" id="instText">
+            тут будет твой текст инструкции, который ты напишешь позже. Например:<br>
+            1. Перед тобой карта из 7 шагов.<br>
+            2. Нажимай на открытые подарки.<br>
+            3. Отвечай правильно, чтобы забрать милый сюрприз и открыть путь дальше!
+        </div>
+        <button onclick="startGame()">Я всё поняла, начать игру! ➔</button>
+    </div>
+
+    <div class="card" id="gameMap">
+        <h2>Карта Сюрпризов 🗺️</h2>
+        <p class="subtitle" style="margin-bottom: 15px;">Пройди все 7 шагов-испытаний, чтобы разблокировать главный СУПЕР-ПРИЗ!</p>
         
-        <div class="snake-container">
-            <div class="gift-node active" id="gift1" onclick="openStep(1)">
-                <div class="step-badge">1</div>🎁
+        <div class="grid-snake">
+            <div class="gift-node node-1 active" id="gift1" onclick="openStep(1)">
+                <div class="step-badge">1</div>🎁<div class="step-label">Шаг 1</div>
             </div>
-            <div class="gift-node locked" id="gift2" onclick="openStep(2)">
-                <div class="step-badge">2</div>🎁
+            <div class="gift-node node-2 locked" id="gift2" onclick="openStep(2)">
+                <div class="step-badge">2</div>🎁<div class="step-label">Шаг 2</div>
             </div>
-            <div class="gift-node locked" id="gift3" onclick="openStep(3)">
-                <div class="step-badge">3</div>🎁
+            <div class="gift-node node-3 locked" id="gift3" onclick="openStep(3)">
+                <div class="step-badge">3</div>🎁<div class="step-label">Шаг 3</div>
             </div>
-            <div class="gift-node locked" id="gift4" onclick="openStep(4)">
-                <div class="step-badge">4</div>🎁
+
+            <div class="gift-node node-6 locked" id="gift6" onclick="openStep(6)">
+                <div class="step-badge">6</div>🎁<div class="step-label">Шаг 6</div>
+            </div>
+            <div class="gift-node node-5 locked" id="gift5" onclick="openStep(5)">
+                <div class="step-badge">5</div>🎁<div class="step-label">Шаг 5</div>
+            </div>
+            <div class="gift-node node-4 locked" id="gift4" onclick="openStep(4)">
+                <div class="step-badge">4</div>🎁<div class="step-label">Шаг 4</div>
+            </div>
+
+            <div class="gift-node node-7 locked" id="gift7" onclick="openStep(7)">
+                <div class="step-badge">7</div>🎁<div class="step-label">Шаг 7</div>
+            </div>
+            
+            <div class="gift-node node-super super-prize locked" id="gift8" onclick="openStep(8)">
+                👑<div class="step-label">СУПЕР-ПРИЗ!</div>
             </div>
         </div>
     </div>
 
     <div class="modal" id="quizModal">
         <div class="modal-content">
-            <h3 id="modalTitle" style="color: #ff4d6d; margin-top: 0;">Вопрос</h3>
-            <p id="modalQuestion" style="color: #555; font-size: 16px;"></p>
+            <h3 id="modalTitle" style="color: #ff007f; margin-top: 0;">Вопрос</h3>
+            <p id="modalQuestion" style="color: #333; font-size: 16px; font-weight: 500;"></p>
             
             <div class="quiz-options" id="quizOptions"></div>
             
             <div class="surprise-box" id="surpriseBox">
-                <h4>🎉 Правильно! Твой сюрприз:</h4>
+                <h4>🎉 Ура! Твой приз:</h4>
                 <p id="surpriseText"></p>
-                <button onclick="closeModal()" style="margin-top: 15px; padding: 10px; font-size: 14px;">Идти дальше ➔</button>
+                <button onclick="closeModal()" style="margin-top: 15px; padding: 12px; font-size: 14px;">Двигаться дальше ➔</button>
             </div>
-            <button id="closeModalBtn" onclick="closeModal()" style="margin-top: 20px; background: #bbb; padding: 10px; font-size: 14px;">Закрыть</button>
+            <button id="closeModalBtn" onclick="closeModal()" style="margin-top: 20px; background: #aaa; padding: 10px; font-size: 14px;">Закрыть</button>
         </div>
     </div>
 
     <script>
         let errorsCount = 0;
         const correctName = "любимка";
-        let currentActiveStep = 1;
 
-        // БАЗА ДАННЫХ ДЛЯ ТВОИХ ВОПРОСОВ И СЮРПРИЗОВ
+        // БАЗА ДАННЫХ ДЛЯ 7 ВОПРОСОВ + СУПЕР ПРИЗ (ШАГ 8)
         const quizData = {
-            1: {
-                question: "Какая твоя привычка умиляет меня больше всего на свете?",
-                options: ["Как ты морщишь носик", "Как ты засыпаешь у меня на плече", "Как ты радуешься вкусняшкам", "Все варианты идеальны!"],
-                correct: 3, // Индекс правильного ответа (начиная с 0)
-                surprise: "Купон на самый нежный массаж после тяжелого дня! И помни — ты у меня невероятная. 💕"
-            },
-            2: {
-                question: "Где мы провели наше лучшее свидание?",
-                options: ["В кино на заднем ряду", "Просто гуляя под дождем", "Там, где мы бесконечно смеялись", "Оно еще впереди!"],
-                correct: 2,
-                surprise: "Письмо: 'Ты — мое главное вдохновение. Твои глаза сияют ярче любых звезд, и я безумно ценю каждый миг с тобой!' 📑"
-            },
-            3: {
-                question: "Сколько раз за день я думаю о тебе?",
-                options: ["Примерно 10 раз", "Только когда скучаю", "Каждую минуту и секунду", "Когда вижу котиков"],
-                correct: 2,
-                surprise: "Купон: 'Билет на любое исполнение твоего каприза (вкусный кофе в постель, заказать твою любимую еду или обнимашки 24/7)!' 🎫"
-            },
-            4: {
-                question: "Готова ли ты прямо сейчас получить самый главный комплимент?",
-                options: ["Да!", "Очень да!", "Я стесняюсь", "Конечно!"],
-                correct: 1,
-                surprise: "Ты — самая красивая, хорошенькая и потрясающая девушка во всей вселенной. Мое сердце бьется только для тебя! Спасибо, что ты есть у меня. С Днем Рождения/Нашим днем! Ты прошла эту змейку! 👑❤️"
-            }
+            1: { question: "Временный вопрос 1. Какая ты?", options: ["Красивая", "Хорошенькая", "Самая лучшая", "Все вместе!"], correct: 3, surprise: "Приз №1: Твое первое милое письмо или купон." },
+            2: { question: "Временный вопрос 2", options: ["Вариант А", "Вариант Б", "Вариант В"], correct: 0, surprise: "Приз №2" },
+            3: { question: "Временный вопрос 3", options: ["Вариант А", "Вариант Б", "Вариант В"], correct: 1, surprise: "Приз №3" },
+            4: { question: "Временный вопрос 4", options: ["Вариант А", "Вариант Б", "Вариант В"], correct: 2, surprise: "Приз №4" },
+            5: { question: "Временный вопрос 5", options: ["Вариант А", "Вариант Б", "Вариант В"], correct: 0, surprise: "Приз №5" },
+            6: { question: "Временный вопрос 6", options: ["Вариант А", "Вариант Б", "Вариант В"], correct: 1, surprise: "Приз №6" },
+            7: { question: "Временный вопрос 7", options: ["Вариант А", "Вариант Б", "Вариант В"], correct: 2, surprise: "Приз №7" },
+            8: { question: "Ты прошла все испытания! Готова открыть Главный Сюрприз?", options: ["ДА-А-А! ❤️", "Конечно готово! ✨"], correct: 0, surprise: "ТУТ БУДЕТ ТВОЙ СУПЕР ПРИЗ ДЛЯ НЕЁ!" }
         };
 
         const hints = [
@@ -213,7 +245,7 @@
             "Почти! Четвертая буква — <b>и</b>",
             "Ну ты чего? Пятая буква — <b>м</b>",
             "Шестая буква — <b>к</b>",
-            "Осталась последняя буква — <b>а</b>! Ну введи скорее! 🥰"
+            "Осталась последняя буква — <b>а</b>! Вводи скорее! 🥰"
         ];
 
         function checkName() {
@@ -222,23 +254,17 @@
             const hintElement = document.getElementById("hintMessage");
             const loginCard = document.getElementById("loginCard");
             const iconElement = document.getElementById("icon");
-            const gameMap = document.getElementById("gameMap");
+            const instructionScreen = document.getElementById("instructionScreen");
 
             loginCard.classList.remove("shake");
 
             if (userInput === correctName) {
                 hintElement.style.color = "#2d6a4f";
-                hintElement.innerHTML = "Ура! Личность подтверждена! 🥰";
+                hintElement.innerHTML = "Личность подтверждена! 🥰";
                 iconElement.innerText = "💖";
                 
                 setTimeout(() => {
-                    loginCard.style.opacity = "0";
-                    loginCard.style.transform = "scale(0.8)";
-                    setTimeout(() => {
-                        loginCard.style.display = "none";
-                        gameMap.style.display = "block";
-                        setTimeout(() => { gameMap.style.opacity = "1"; gameMap.style.transform = "scale(1)"; }, 50);
-                    }, 400);
+                    switchScreens(loginCard, instructionScreen);
                 }, 1000);
             } else {
                 setTimeout(() => { loginCard.classList.add("shake"); }, 10);
@@ -248,12 +274,28 @@
             }
         }
 
+        function startGame() {
+            const instructionScreen = document.getElementById("instructionScreen");
+            const gameMap = document.getElementById("gameMap");
+            switchScreens(instructionScreen, gameMap);
+        }
+
+        function switchScreens(fromScreen, toScreen) {
+            fromScreen.style.opacity = "0";
+            fromScreen.style.transform = "scale(0.8)";
+            setTimeout(() => {
+                fromScreen.style.display = "none";
+                toScreen.style.display = "block";
+                setTimeout(() => { toScreen.style.opacity = "1"; toScreen.style.transform = "scale(1)"; }, 50);
+            }, 400);
+        }
+
         function openStep(stepNumber) {
             const gift = document.getElementById(`gift${stepNumber}`);
             if (gift.classList.contains('locked')) return;
 
             const data = quizData[stepNumber];
-            document.getElementById("modalTitle").innerText = `Подарок №${stepNumber} 🎁`;
+            document.getElementById("modalTitle").innerText = stepNumber === 8 ? "👑 ГЛАВНЫЙ СУПЕР-ПРИЗ" : `Шаг №${stepNumber} 🎁`;
             document.getElementById("modalQuestion").innerText = data.question;
             
             const optionsContainer = document.getElementById("quizOptions");
@@ -274,32 +316,27 @@
 
         function checkAnswer(step, selectedIndex, clickedBtn) {
             const data = quizData[step];
-            if (selectedIndex === data.correct) {
-                // Если ответ верный
+            if (selectedIndex === data.correct || step === 8) { // на супер приз правильный любой вариант
                 document.getElementById("quizOptions").innerHTML = "";
                 document.getElementById("closeModalBtn").style.display = "none";
                 document.getElementById("surpriseText").innerText = data.surprise;
                 document.getElementById("surpriseBox").style.display = "block";
 
-                // Отмечаем текущий подарок как открытый
                 const currentGift = document.getElementById(`gift${step}`);
-                currentGift.innerText = "❤️";
+                currentGift.innerText = step === 8 ? "👑❤️" : "❤️";
                 currentGift.classList.remove("active");
                 currentGift.classList.add("opened");
 
-                // Разблокируем следующий подарок
                 const nextStep = step + 1;
                 const nextGift = document.getElementById(`gift${nextStep}`);
                 if (nextGift && nextGift.classList.contains('locked')) {
                     nextGift.classList.remove("locked");
                     nextGift.classList.add("active");
-                    currentActiveStep = nextStep;
                 }
             } else {
-                // Если ответ неверный
                 clickedBtn.style.background = "#ffccd5";
                 clickedBtn.style.borderColor = "#ff4d6d";
-                clickedBtn.innerText = "❌ Не-а, попробуй еще раз!";
+                clickedBtn.innerText = "❌ Попробуй другой вариант!";
             }
         }
 
