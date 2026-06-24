@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Карта Наших Приключений</title>
     <style>
         body, html {
@@ -46,10 +46,10 @@
         .hint-message { margin-top: 15px; font-size: 14px; color: #ff0055; min-height: 30px; font-weight: bold; }
         .inst-text { text-align: left; background: rgba(255, 255, 255, 0.7); padding: 20px; border-radius: 20px; margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: #333; }
 
-        /* --- ЭКРАН С КАРТОЙ --- */
+        /* --- ОРИГИНАЛЬНЫЙ ЭКРАН ДЛЯ НОУТБУКА (БЕЗ ИЗМЕНЕНИЙ) --- */
         #gameScreen {
             display: none; position: relative; width: 100%; height: 100%;
-            background-image: url('main.png'); /* Твоя PNG картинка */
+            background-image: url('main.png'); 
             background-size: cover; background-position: center; box-sizing: border-box;
         }
 
@@ -65,7 +65,6 @@
         }
         .map-header h3 { margin: 0; color: #ff007f; font-size: 20px; letter-spacing: 0.5px; }
 
-        /* --- СЕТКА СОЕДИНИТЕЛЬНЫХ ЛИНИЙ (SVG) --- */
         .map-lines {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1;
@@ -75,15 +74,16 @@
             fill: none; stroke-linecap: round; opacity: 0.7;
         }
 
-        /* --- КРУЖОЧКИ ШАГОВ --- */
+        /* КРУЖОЧКИ ШАГОВ */
         .step-node {
             position: absolute; width: 60px; height: 60px; background: white; border-radius: 50%;
             display: flex; align-items: center; justify-content: center; font-size: 26px;
             cursor: pointer; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2; font-weight: bold;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Расположение шагов по экрану (можно менять % для настройки под фото) */
+        /* ТВОИ ОРИГИНАЛЬНЫЕ НАСТРОЙКИ КРУЖОЧКОВ ДЛЯ НОУТБУКА (НЕ ТРОГАЕМ) */
         #gift1 { bottom: 12%; right: 15%; }
         #gift2 { bottom: 28%; right: 38%; } 
         #gift3 { bottom: 15%; left: 25%; }
@@ -92,7 +92,6 @@
         #gift6 { top: 22%; right: 35%; }
         #gift7 { top: 48%; right: 20%; }
         
-        /* Супер-приз */
         #gift8 {
             top: 48%; left: 50%; transform: translate(-50%, -50%);
             width: 85px; height: 85px; font-size: 42px;
@@ -114,6 +113,31 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.1); box-shadow: 0 10px 25px rgba(255, 0, 127, 0.4); }
             100% { transform: scale(1); }
+        }
+
+        /* 🚨 НАСТРОЙКА ДЛЯ ТЕЛЕФОНОВ: ЗМЕЙКА СМЕЩЕНА НИЖЕ ОТ ЗАГОЛОВКА 🚨 */
+        @media (max-width: 767px) {
+            #gameScreen {
+                background-image: url('mobilemain.png') !important;
+                background-size: cover; 
+                background-position: center;
+            }
+            .map-container { max-width: 100%; height: 100%; }
+            
+            .step-node { width: 46px; height: 46px; font-size: 20px; }
+            .step-number { width: 16px; height: 16px; font-size: 9px; }
+            #gift8 { width: 60px; height: 60px; font-size: 26px; }
+            .map-header h3 { font-size: 16px; }
+
+            /* Координаты смещены по вертикали (top увеличен), чтобы освободить место под заголовок */
+            #gift1 { top: 88%; left: 50%; bottom: auto; right: auto; }
+            #gift2 { top: 78%; left: 25%; bottom: auto; right: auto; } 
+            #gift3 { top: 68%; left: 75%; bottom: auto; right: auto; }
+            #gift4 { top: 58%; left: 25%; bottom: auto; right: auto; }
+            #gift5 { top: 48%; left: 70%; bottom: auto; right: auto; }
+            #gift6 { top: 38%; left: 30%; bottom: auto; right: auto; }
+            #gift7 { top: 28%; left: 75%; bottom: auto; right: auto; }
+            #gift8 { top: 18%; left: 50%; bottom: auto; right: auto; transform: translate(-50%, -50%); }
         }
 
         /* МОДАЛЬНОЕ ОКНО */
@@ -190,7 +214,8 @@
             <div class="step-node locked" id="gift5" onclick="openStep(5)"><div class="step-number">5</div>🎁</div>
             <div class="step-node locked" id="gift6" onclick="openStep(6)"><div class="step-number">6</div>🎁</div>
             <div class="step-node locked" id="gift7" onclick="openStep(7)"><div class="step-number">7</div>🎁</div>
-            <div class="step-node locked" id="gift8" onclick="openStep(8)">🎁</div> </div>
+            <div class="step-node locked" id="gift8" onclick="openStep(8)">🎁</div>
+        </div>
     </div>
 
     <div class="modal" id="quizModal">
@@ -219,56 +244,48 @@
         const correctName = "любимка";
         let currentStepOpen = 1;
 
-        // БАЗА ДАННЫХ ВОПРОСОВ И ОТВЕТОВ
         const quizData = {
             1: { 
                 intro: "Давай разомнемся и ответим на самый легкий вопрос! Наверняка ты помнишь этот день наизусть... 😉",
                 question: "Какого числа мы начали встречаться?", 
                 answers: ["7февраля", "7.02", "07.02"],
-                successMsg: "Умничка моя! 🥰 Первый шаг сделан, разминка прошла идеально. Давай к следующему, дальше будет капельку сложнее!",
-                surprise: "" 
+                successMsg: "Умничка моя! 🥰 Первый шаг сделан, разминка прошла идеально. Давай к следующему, дальше будет капельку сложнее!"
             },
             2: { 
                 intro: "Так, разминка окончена! Давай вспомним наш романтический вечер в честь Дня Влюбленных... 🥂",
                 question: "В каком ресторане мы были 14 февраля?", 
                 answers: ["джиммичу"], 
-                successMsg: "Умничка моя! 😘 Как приятно, что ты помнишь это место. Ну что, готова идти дальше?",
-                surprise: "" 
+                successMsg: "Умничка моя! 😘 Как приятно, что ты помнишь это место. Ну что, готова идти дальше?"
             },
             3: { 
                 intro: "О-о-о, а это один из моих самых любимых моментов. Сердце тогда билось просто бешено... 🎬🍿",
                 question: "На каком фильме мы первый раз поцеловались?", 
                 answers: ["мартивеликолепный"], 
-                successMsg: "Умничка моя! 💖 Этот поцелуй я не забуду никогда. Ты у меня самая лучшая! Давай к следующему вопросу.",
-                surprise: "" 
+                successMsg: "Умничка моя! 💖 Этот поцелуй я не забуду никогда. Ты у меня самая лучшая! Давай к следующему вопросу."
             },
             4: { 
                 intro: "Вспоминаем наши спортивные и безумно эмоциональные выходы! Формат ответа: написать счет, пример 0:0 ⚽",
                 question: "Любимка, с каким счетом закончился матч Краснодар : Оренбург, на который мы с тобой ходили?", 
                 answers: ["3:0", "3-0"], 
-                successMsg: "Умничка моя! 🥳 Вот это память! Настоящая болельщица. Погнали дальше по нашей карте!",
-                surprise: "" 
+                successMsg: "Умничка моя! 🥳 Вот это память! Настоящая болельщица. Погнали дальше по нашей карте!"
             },
             5: { 
                 intro: "А теперь вопрос на супер-внимательность! Помнишь этот неожиданный и забавный момент? 🌟",
                 question: "Зайчик, в каком месте мы были, когда впервые с тобой встретили известную личность?", 
                 answers: ["золотоеяблоко"], 
-                successMsg: "Умничка моя! 🍏 Угадала! Ты просто невероятная. Осталось совсем чуть-чуть, двигаемся дальше!",
-                surprise: "" 
+                successMsg: "Умничка моя! 🍏 Угадала! Ты просто невероятная. Осталось совсем чуть-чуть, двигаемся дальше!"
             },
             6: { 
                 intro: "Загадка на логику! Включаем детективное мышление. Города реальные, но реальность была виртуальной... 🖥️✈️",
                 question: "Любимочка, в каком месте мы бывали с тобой и в Краснодаре, и в Пятигорске, но при этом оба города видели только через экраны?", 
                 answers: ["компьютерныйклуб", "компклуб", "компьютерномклубе"], 
-                successMsg: "Умничка моя! 🎮 Нашлись геймеры! Это было очень круто. Ты у меня самая хорошенькая. Готова к финальному шагу?",
-                surprise: "" 
+                successMsg: "Умничка моя! 🎮 Нашлись геймеры! Это было очень круто. Ты у меня самая хорошенькая. Готова к финальному шагу?"
             },
             7: { 
                 intro: "Почти у цели! Последний шаг перед главным секретом. Наш самый главный символ в переписках... 🫶✨",
                 question: "Котик, какой наш с тобой любимый смайлик?", 
                 answers: ["🫰"], 
-                successMsg: "Умничка моя! 🫰 Именно он! Ты справилась со всеми вопросами. Путь к Супер-Призу открыт! Нажимай скорее!",
-                surprise: "" 
+                successMsg: "Умничка моя! 🫰 Именно он! Ты справилась со всеми вопросами. Путь к Супер-Призу открыт! Нажимай скорее!"
             }
         };
 
@@ -344,20 +361,17 @@
             document.getElementById("surpriseBox").style.display = "none";
             document.getElementById("closeModalBtn").style.display = "inline-block";
 
-            // ЕСЛИ ЭТО СУПЕР ПРИЗ (ШАГ 8) - НИКАКОЙ ВИКТОРИНЫ И ВВОДА
             if (stepNumber === 8) {
                 document.getElementById("modalTitle").innerText = "👑 СУПЕР-ПРИЗ";
                 document.getElementById("quizIntroText").innerText = "Главный подарок ждет тебя внутри...";
                 document.getElementById("modalQuestion").innerText = "";
                 document.getElementById("inputContainer").style.display = "none";
                 
-                // Сразу выводим твой финальный текст
                 document.getElementById("surpriseHeader").innerText = "🎁 Твой подарок:";
                 document.getElementById("surpriseText").innerHTML = "Любимка моя, вот и закончилась наша игра, ты отлично справилась, ты моя умничка, я тебя целую. Завтра мы идем в одно очень интересненькое местечко, в котором мы были 7 марта. Целую любимку. 🫰";
-                document.getElementById("nextStepBtn").style.display = "none"; // Прячем кнопку продолжения, ведь это финал
+                document.getElementById("nextStepBtn").style.display = "none"; 
                 document.getElementById("surpriseBox").style.display = "block";
             } else {
-                // ДЛЯ ОБЫЧНЫХ ШАГОВ С ВОПРОСАМИ
                 const data = quizData[stepNumber];
                 document.getElementById("modalTitle").innerText = `Шаг №${stepNumber} 🎁`;
                 document.getElementById("quizIntroText").innerText = data.intro;
@@ -387,7 +401,7 @@
                 document.getElementById("surpriseBox").style.display = "block";
 
                 const currentGift = document.getElementById(`gift${currentStepOpen}`);
-                currentGift.innerText = "🫰";
+                currentGift.innerText = "❤️";
                 currentGift.classList.remove("active");
                 currentGift.classList.add("opened");
 
