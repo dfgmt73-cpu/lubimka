@@ -5,41 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Волшебная Карта для Любимки ❤️</title>
     <style>
-        /* Общие стили */
         body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
+            margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            overflow: hidden; display: flex; justify-content: center; align-items: center;
         }
 
-        /* ЭКРАН 1 и 2: Стильные полупрозрачные карточки поверх цветного фона */
+        /* ЭКРАН 1 и 2: Оверлеи */
         .overlay-bg {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            position: absolute; width: 100%; height: 100%;
             background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 5;
-            transition: all 0.5s ease;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 5; transition: all 0.5s ease;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px 30px;
-            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 30px; border-radius: 30px;
             box-shadow: 0 15px 35px rgba(224, 93, 117, 0.3);
-            text-align: center;
-            width: 90%;
-            max-width: 380px;
-            box-sizing: border-box;
+            text-align: center; width: 90%; max-width: 380px; box-sizing: border-box;
         }
 
         .icon { font-size: 50px; margin-bottom: 15px; display: inline-block; }
@@ -60,102 +44,58 @@
         button:hover { transform: translateY(-2px); }
 
         .hint-message { margin-top: 15px; font-size: 14px; color: #ff0055; min-height: 30px; font-weight: bold; }
-        .inst-text { text-align: left; background: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 20px; margin-bottom: 20px; font-size: 13.5px; line-height: 1.5; }
+        .inst-text { text-align: left; background: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 20px; margin-bottom: 20px; font-size: 13.5px; line-height: 1.6; color: #333; }
 
-        /* --- ЭКРАН 3: НАСТОЯЩАЯ ИГРОВАЯ КАРТА НА ВЕСЬ ЭКРАН --- */
+        /* --- ЭКРАН 3: КАРТА НА ВЕСЬ ЭКРАН --- */
         #gameScreen {
-            display: none;
-            position: relative;
-            width: 100%;
-            height: 100%;
-            /* Загружаем сочную мультяшную сказочную карту на весь бэкграунд */
+            display: none; position: relative; width: 100%; height: 100%;
             background-image: url('https://img.freepik.com/free-vector/fairy-tale-landscape-concept_23-2148467246.jpg');
-            background-size: cover;
-            background-position: center;
-            box-sizing: border-box;
+            background-size: cover; background-position: center; box-sizing: border-box;
         }
 
-        /* Обертка для карты, чтобы центрировать ходилку */
-        .map-container {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            max-width: 1024px; /* Оптимально для планшетов и экранов */
-            max-height: 768px;
-            margin: 0 auto;
-        }
+        .map-container { position: relative; width: 100%; height: 100%; max-width: 1024px; max-height: 768px; margin: 0 auto; }
 
-        /* Заголовок карты сверху */
         .map-header {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.85);
-            padding: 10px 25px;
-            border-radius: 50px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            text-align: center;
-            z-index: 3;
-            pointer-events: none;
-            width: 80%;
-            max-width: 400px;
+            position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.9); padding: 10px 25px; border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; z-index: 3; width: 80%; max-width: 400px;
         }
         .map-header h3 { margin: 0; color: #ff007f; font-size: 18px; }
         .map-header p { margin: 3px 0 0 0; font-size: 11px; color: #555; }
 
-        /* --- СВОБОДНО РАСКИДАННЫЕ КРУЖОЧКИ-ШАГИ (КАК НА РЕФЕРЕНСЕ) --- */
+        /* --- КРУЖОЧКИ ШАГОВ --- */
         .step-node {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 26px;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 2;
-            font-weight: bold;
+            position: absolute; width: 60px; height: 60px; background: white; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 26px;
+            cursor: pointer; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2; font-weight: bold;
         }
 
-        /* Прорисовываем извилистый путь (X и Y координаты в % от экрана) */
-        /* Идем змейкой: Справа-вниз -> Налево -> Вверх -> Центр */
-        #gift1 { bottom: 12%; right: 15%; } /* СТАРТ - правый нижний угол */
+        #gift1 { bottom: 12%; right: 15%; }
         #gift2 { bottom: 25%; right: 40%; } 
-        #gift3 { bottom: 15%; left: 25%; }  /* Уходим в левый нижний угол */
-        #gift4 { top: 50%; left: 12%; }     /* Поднимаемся вверх по левому краю */
-        #gift5 { top: 25%; left: 30%; }     /* Уходим в верхний левый угол */
-        #gift6 { top: 20%; right: 35%; }    /* Двигаемся направо поверху */
-        #gift7 { top: 45%; right: 18%; }    /* Спускаемся к правому краю */
+        #gift3 { bottom: 15%; left: 25%; }
+        #gift4 { top: 50%; left: 12%; }
+        #gift5 { top: 25%; left: 30%; }
+        #gift6 { top: 20%; right: 35%; }
+        #gift7 { top: 45%; right: 18%; }
         
-        /* Финальный СУПЕР-ПРИЗ прямо по центру карты! */
         #gift8 {
-            top: 45%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 85px; height: 85px;
-            font-size: 42px;
+            top: 45%; left: 50%; transform: translate(-50%, -50%);
+            width: 85px; height: 85px; font-size: 42px;
             background: linear-gradient(45deg, #ffb703, #ff007f);
         }
-        #gift8 .step-number { background: #fff; color: #ff007f; }
 
-        /* Маленький номер шага на каждом кружочке */
         .step-number {
             position: absolute; top: -5px; left: -5px; background: #ff007f;
             color: white; font-size: 10px; width: 18px; height: 18px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
         }
 
-        /* Состояния кружочков */
         .step-node.locked { background: #ccc; opacity: 0.4; cursor: not-allowed; pointer-events: none; box-shadow: none; }
         .step-node.locked::after { content: '🔒'; position: absolute; font-size: 11px; bottom: 0; right: 0; }
         .step-node.active { border: 3px solid #ff007f; animation: pulse 1.3s infinite; }
         .step-node.opened { background: #ffe5ec; border: 2px solid #ff758f; }
 
-        /* Пульсация для активного шага */
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); box-shadow: 0 10px 25px rgba(255, 0, 127, 0.4); }
@@ -172,16 +112,14 @@
             background: white; padding: 30px 20px; border-radius: 25px; width: 100%; max-width: 360px;
             text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); animation: popUp 0.3s ease;
         }
-        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
-        .option-btn {
-            background: #fff5f7; color: #333; border: 2px solid #ffccd5; padding: 12px;
-            border-radius: 50px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;
-        }
-        .option-btn:hover { background: #ffe5ec; border-color: #ff007f; }
         
+        .quiz-intro-text { color: #777; font-size: 13px; font-style: italic; margin-bottom: 15px; line-height: 1.4; }
+        .quiz-input-field { margin-top: 15px; margin-bottom: 10px; }
+        .quiz-error-msg { color: #ff0055; font-size: 13px; margin-top: 5px; font-weight: bold; min-height: 20px; }
+
         .surprise-box { display: none; margin-top: 15px; padding: 15px; background: #f0fff4; border-radius: 18px; border: 2px dashed #2d6a4f; }
         .surprise-box h4 { color: #2d6a4f; margin: 0 0 5px 0; }
-        .surprise-box p { color: #333; font-size: 13.5px; margin: 0; line-height: 1.4; }
+        .surprise-box p { color: #333; font-size: 14px; margin: 0; line-height: 1.4; font-weight: 500; }
 
         @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
         .shake { animation: shake 0.4s ease-in-out; }
@@ -207,7 +145,7 @@
         <div class="card">
             <div class="icon">📜</div>
             <h2>Инструкция квеста</h2>
-            <div class="inst-text">
+            <div class="inst-text" id="instText">
                 Тут будет твой личный текст инструкции, который ты пришлешь!<br><br>
                 Например: Пройди по извилистой тропинке сказочного королевства, открой все 7 секретных подарков и доберись до центра карты, где тебя ждет главный сюрприз!
             </div>
@@ -215,56 +153,42 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 3: ИГРОВАЯ КАРТА-ХОДИЛКА -->
+    <!-- ЭКРАН 3: ИГРОВАЯ КАРТА -->
     <div id="gameScreen">
         <div class="map-container">
             <div class="map-header">
                 <h3>Карта Твоих Приключений 🗺️</h3>
-                <p>Нажимай на активные кружочки, проходи испытания и двигайся к центру!</p>
+                <p>Нажимай на активные кружочки, вводи ответы и двигайся к центру!</p>
             </div>
 
-            <!-- Кружочки раскиданы по карте змейкой-зигзагом -->
-            <div class="step-node active" id="gift1" onclick="openStep(1)">
-                <div class="step-number">1</div>🎁
-            </div>
-            <div class="step-node locked" id="gift2" onclick="openStep(2)">
-                <div class="step-number">2</div>🎁
-            </div>
-            <div class="step-node locked" id="gift3" onclick="openStep(3)">
-                <div class="step-number">3</div>🎁
-            </div>
-            <div class="step-node locked" id="gift4" onclick="openStep(4)">
-                <div class="step-number">4</div>🎁
-            </div>
-            <div class="step-node locked" id="gift5" onclick="openStep(5)">
-                <div class="step-number">5</div>🎁
-            </div>
-            <div class="step-node locked" id="gift6" onclick="openStep(6)">
-                <div class="step-number">6</div>🎁
-            </div>
-            <div class="step-node locked" id="gift7" onclick="openStep(7)">
-                <div class="step-number">7</div>🎁
-            </div>
-
-            <!-- Главный супер-приз по центру! -->
-            <div class="step-node locked" id="gift8" onclick="openStep(8)">
-                👑
-            </div>
+            <div class="step-node active" id="gift1" onclick="openStep(1)"><div class="step-number">1</div>🎁</div>
+            <div class="step-node locked" id="gift2" onclick="openStep(2)"><div class="step-number">2</div>🎁</div>
+            <div class="step-node locked" id="gift3" onclick="openStep(3)"><div class="step-number">3</div>🎁</div>
+            <div class="step-node locked" id="gift4" onclick="openStep(4)"><div class="step-number">4</div>🎁</div>
+            <div class="step-node locked" id="gift5" onclick="openStep(5)"><div class="step-number">5</div>🎁</div>
+            <div class="step-node locked" id="gift6" onclick="openStep(6)"><div class="step-number">6</div>🎁</div>
+            <div class="step-node locked" id="gift7" onclick="openStep(7)"><div class="step-number">7</div>🎁</div>
+            <div class="step-node locked" id="gift8" onclick="openStep(8)">👑</div>
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ КВИЗА -->
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ВВОДА ОТВЕТА -->
     <div class="modal" id="quizModal">
-        <div class="modal-content">
-            <h3 id="modalTitle" style="color: #ff007f; margin-top: 0;">Шаг квеста</h3>
-            <p id="modalQuestion" style="color: #333; font-size: 15px; font-weight: 500;"></p>
+        <div class="modal-content" id="modalContent">
+            <h3 id="modalTitle" style="color: #ff007f; margin-top: 0; margin-bottom: 5px;">Шаг квеста</h3>
+            <div class="quiz-intro-text" id="quizIntroText">Подпись к вопросу</div>
+            <p id="modalQuestion" style="color: #333; font-size: 16px; font-weight: 600; margin-bottom: 15px;"></p>
             
-            <div class="quiz-options" id="quizOptions"></div>
+            <div id="inputContainer">
+                <input type="text" id="quizAnswerInput" class="quiz-input-field" placeholder="Напиши ответ сюда..." autocomplete="off">
+                <button id="submitAnswerBtn" onclick="submitAnswer()">Ответить</button>
+                <div class="quiz-error-msg" id="quizErrorMsg"></div>
+            </div>
             
             <div class="surprise-box" id="surpriseBox">
-                <h4>🎉 Ответ верный! Твой бонус:</h4>
+                <h4 id="surpriseHeader">🎉 Умничка моя!</h4>
                 <p id="surpriseText"></p>
-                <button onclick="closeModal()" style="margin-top: 15px; padding: 10px; font-size: 13px;">Идти дальше ➔</button>
+                <button onclick="closeModal()" style="margin-top: 15px; padding: 10px; font-size: 13px;">Идти к следующему шагу ➔</button>
             </div>
             <button id="closeModalBtn" onclick="closeModal()" style="margin-top: 15px; background: #aaa; padding: 10px; font-size: 13px;">Закрыть</button>
         </div>
@@ -273,16 +197,66 @@
     <script>
         let errorsCount = 0;
         const correctName = "любимка";
+        let currentStepOpen = 1;
 
+        // БАЗА ДАННЫХ ВОПРОСОВ, ПОДПИСЕЙ И ОТВЕТОВ
         const quizData = {
-            1: { question: "Временный вопрос 1. Проверим, как работает ходилка?", options: ["Супер!", "Отлично", "Погнали дальше!"], correct: 2, surprise: "Приз №1: Начало положено, ты сделала первый шаг по карте!" },
-            2: { question: "Временный вопрос 2", options: ["Вариант А", "Вариант Б"], correct: 0, surprise: "Приз №2" },
-            3: { question: "Временный вопрос 3", options: ["Вариант А", "Вариант Б"], correct: 1, surprise: "Приз №3" },
-            4: { question: "Временный вопрос 4", options: ["Вариант А", "Вариант Б"], correct: 0, surprise: "Приз №4" },
-            5: { question: "Временный вопрос 5", options: ["Вариант А", "Вариант Б"], correct: 1, surprise: "Приз №5" },
-            6: { question: "Временный вопрос 6", options: ["Вариант А", "Вариант Б"], correct: 0, surprise: "Приз №6" },
-            7: { question: "Временный вопрос 7", options: ["Вариант А", "Вариант Б"], correct: 1, surprise: "Приз №7" },
-            8: { question: "Ура! Карта полностью пройдена! Готова забрать Супер-Приз?", options: ["ДА! ❤️"], correct: 0, surprise: "ТУТ БУДЕТ ТВОЙ ГЛАВНЫЙ СЮРПРИЗ!" }
+            1: { 
+                intro: "Давай разомнемся и ответим на самый легкий вопрос! Наверняка ты помнишь этот день наизусть... 😉",
+                question: "Какого числа мы начали встречаться?", 
+                answers: ["7февраля", "7.02", "07.02"], // Варианты правильного ввода (без пробелов для точной проверки)
+                successMsg: "Умничка моя! 🥰 Первый шаг сделан, разминка прошла идеально. Давай к следующему, дальше будет капельку сложнее!",
+                surprise: "Твое милое письмо или бонус №1 (можешь вписать сюда текст)." 
+            },
+            2: { 
+                intro: "Так, разминка окончена! Давай вспомним наш романтический вечер в честь Дня Влюбленных... 🥂",
+                question: "В каком ресторане мы были 14 февраля?", 
+                answers: ["джиммичу"], 
+                successMsg: "Умничка моя! 😘 Как приятно, что ты помнишь это место. Ну что, готова идти дальше?",
+                surprise: "Твое милое письмо или бонус №2." 
+            },
+            3: { 
+                intro: "О-о-о, а это один из моих самых любимых моментов. Сердце тогда билось просто бешено... 🎬🍿",
+                question: "На каком фильме мы первый раз поцеловались?", 
+                answers: ["мартивеликолепный"], 
+                successMsg: "Умничка моя! 💖 Этот поцелуй я не забуду никогда. Ты у меня самая лучшая! Давай к следующему вопросу.",
+                surprise: "Твое милое письмо или бонус №3." 
+            },
+            4: { 
+                intro: "Вспоминаем наши спортивные и безумно эмоциональные выходы! Формат ответа: написать счет, пример 0:0 ⚽",
+                question: "Любимка, с каким счетом закончился матч Краснодар : Оренбург, на который мы с тобой ходили?", 
+                answers: ["3:0", "3-0"], 
+                successMsg: "Умничка моя! 🥳 Вот это память! Настоящая болельщица. Погнали дальше по нашей карте!",
+                surprise: "Твое милое письмо или бонус №4." 
+            },
+            5: { 
+                intro: "А теперь вопрос на супер-внимательность! Помнишь этот неожиданный и забавный момент? 🌟",
+                question: "Зайчик, в каком месте мы были, когда впервые с тобой встретили известную личность?", 
+                answers: ["золотоеяблоко"], 
+                successMsg: "Умничка моя! 🍏 Угадала! Ты просто невероятная. Осталось совсем чуть-чуть, двигаемся дальше!",
+                surprise: "Твое милое письмо или бонус №5." 
+            },
+            6: { 
+                intro: "Загадка на логику! Включаем детективное мышление. Города реальные, но реальность была виртуальной... 🖥️✈️",
+                question: "Любимочка, в каком месте мы бывали с тобой и в Краснодаре, и в Пятигорске, но при этом оба города видели только через экраны?", 
+                answers: ["компьютерныйклуб", "компклуб", "компьютерномклубе"], 
+                successMsg: "Умничка моя! 🎮 Нашлись геймеры! Это было очень круто. Ты у меня самая хорошенькая. Готова к финальному шагу?",
+                surprise: "Твое милое письмо или бонус №6." 
+            },
+            7: { 
+                intro: "Почти у цели! Последний шаг перед главным секретом. Наш самый главный символ в переписках... 🫶✨",
+                question: "Котик, какой наш с тобой любимый смайлик?", 
+                answers: ["🫰"], // Поддерживает смайлик
+                successMsg: "Умничка моя! 🫰 Именно он! Ты справилась со всеми вопросами. Путь к Супер-Призу открыт! Нажимай скорее!",
+                surprise: "Ты открыла проход в самый центр карты! ❤️" 
+            },
+            8: { 
+                intro: "УРА-А-А! Ты прошла всю карту и доказала, что помнишь каждую детальку нашей истории! 👑✨",
+                question: "Ты готова забрать свой Главный Супер-Приз?", 
+                answers: ["да", "готова", "даа", "дааа"], 
+                successMsg: "Ты у меня самая лучшая, самая красивая и самая любимая девочка во вселенной! 👑❤️",
+                surprise: "СЮДA ТЫ НАПИШЕШЬ СВОЙ ГЛАВНЫЙ СУПЕР ПРИЗ (например: 'Посмотри под подушку' или твое самое большое и нежное любовное письмо)!" 
+            }
         };
 
         const hints = [
@@ -309,15 +283,12 @@
                 hintElement.style.color = "#2d6a4f";
                 hintElement.innerHTML = "Личность подтверждена! 🥰";
                 iconElement.innerText = "💖";
-                
                 setTimeout(() => {
                     document.getElementById("screenLogin").style.opacity = "0";
                     setTimeout(() => {
                         document.getElementById("screenLogin").style.display = "none";
                         document.getElementById("screenInstruction").style.display = "flex";
-                        setTimeout(() => {
-                            document.getElementById("screenInstruction").style.opacity = "1";
-                        }, 50);
+                        setTimeout(() => { document.getElementById("screenInstruction").style.opacity = "1"; }, 50);
                     }, 400);
                 }, 1000);
             } else {
@@ -340,54 +311,72 @@
             const gift = document.getElementById(`gift${stepNumber}`);
             if (gift.classList.contains('locked')) return;
 
+            currentStepOpen = stepNumber;
             const data = quizData[stepNumber];
-            document.getElementById("modalTitle").innerText = stepNumber === 8 ? "👑 ЦЕНТР КАРТЫ: СУПЕР-ПРИЗ" : `Шаг №${stepNumber} 🎁`;
+            
+            document.getElementById("modalTitle").innerText = stepNumber === 8 ? "👑 ГЛАВНЫЙ СУПЕР-ПРИЗ" : `Шаг №${stepNumber} 🎁`;
+            document.getElementById("quizIntroText").innerText = data.intro;
             document.getElementById("modalQuestion").innerText = data.question;
             
-            const optionsContainer = document.getElementById("quizOptions");
-            optionsContainer.innerHTML = "";
+            // Сброс полей
+            document.getElementById("quizAnswerInput").value = "";
+            document.getElementById("quizErrorMsg").innerText = "";
             document.getElementById("surpriseBox").style.display = "none";
+            document.getElementById("inputContainer").style.display = "block";
             document.getElementById("closeModalBtn").style.display = "inline-block";
 
-            data.options.forEach((option, index) => {
-                const btn = document.createElement("button");
-                btn.className = "option-btn";
-                btn.innerText = option;
-                btn.onclick = () => checkAnswer(stepNumber, index, btn);
-                optionsContainer.appendChild(btn);
-            });
-
             document.getElementById("quizModal").style.display = "flex";
+            document.getElementById("quizAnswerInput").focus();
         }
 
-        function checkAnswer(step, selectedIndex, clickedBtn) {
-            const data = quizData[step];
-            if (selectedIndex === data.correct) {
-                document.getElementById("quizOptions").innerHTML = "";
+        function submitAnswer() {
+            const userInput = document.getElementById("quizAnswerInput").value.trim().toLowerCase().replace(/\s+/g, '');
+            const data = quizData[currentStepOpen];
+            const modalContent = document.getElementById("modalContent");
+            
+            modalContent.classList.remove("shake");
+
+            // Проверка ответа (убираем пробелы у ввода для надежности сравнения)
+            const isCorrect = data.answers.some(ans => userInput === ans.toLowerCase().replace(/\s+/g, ''));
+
+            if (isCorrect) {
+                // ПРАВИЛЬНО
+                document.getElementById("inputContainer").style.display = "none";
                 document.getElementById("closeModalBtn").style.display = "none";
-                document.getElementById("surpriseText").innerText = data.surprise;
+                
+                document.getElementById("surpriseHeader").innerText = currentStepOpen === 8 ? "👑 Ты сделала это!" : "🎉 Умничка моя!";
+                document.getElementById("surpriseText").innerHTML = `<b>${data.successMsg}</b><br><br>${data.surprise}`;
                 document.getElementById("surpriseBox").style.display = "block";
 
-                const currentGift = document.getElementById(`gift${step}`);
-                currentGift.innerText = step === 8 ? "👑❤️" : "❤️";
+                // Анимация на карте
+                const currentGift = document.getElementById(`gift${currentStepOpen}`);
+                currentGift.innerText = currentStepOpen === 8 ? "👑❤️" : "❤️";
                 currentGift.classList.remove("active");
                 currentGift.classList.add("opened");
 
-                const nextStep = step + 1;
+                // Открываем следующий шаг
+                const nextStep = currentStepOpen + 1;
                 const nextGift = document.getElementById(`gift${nextStep}`);
                 if (nextGift && nextGift.classList.contains('locked')) {
                     nextGift.classList.remove("locked");
                     nextGift.classList.add("active");
                 }
             } else {
-                clickedBtn.style.background = "#ffccd5";
-                clickedBtn.style.borderColor = "#ff4d6d";
-                clickedBtn.innerText = "❌ Мимо! Попробуй еще раз";
+                // НЕПРАВИЛЬНО
+                setTimeout(() => { modalContent.classList.add("shake"); }, 10);
+                document.getElementById("quizErrorMsg").innerText = "❌ Не-а, ответ неверный или опечатка! Попробуй еще раз, котик.";
             }
         }
 
         function closeModal() { document.getElementById("quizModal").style.display = "none"; }
-        document.getElementById("nameInput").addEventListener("keyup", function(event) { if (event.key === "Enter") { checkName(); } });
+        
+        // Клик по Enter в поле ответа
+        document.getElementById("quizAnswerInput").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") { submitAnswer(); }
+        });
+        document.getElementById("nameInput").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") { checkName(); }
+        });
     </script>
 </body>
 </html>
