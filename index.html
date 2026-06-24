@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход для Самой Самой ❤️</title>
+    <style>
+        /* Общие нежные стили для фона */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Задний фон с мягкими летающими сердечками (опционально) */
+        .bg-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Карточка авторизации */
+        .login-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(224, 93, 117, 0.15);
+            text-align: center;
+            width: 100%;
+            max-width: 380px;
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+
+        /* Милая иконка над формой */
+        .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        h2 {
+            color: #ff4d6d;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        p.subtitle {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        /* Поле ввода */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ffe5ec;
+            border-radius: 50px;
+            font-size: 16px;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: #555;
+        }
+
+        input:focus {
+            border-color: #ff758f;
+            box-shadow: 0 0 10px rgba(255, 117, 143, 0.2);
+        }
+
+        /* Красивая розовая кнопка */
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #ff4d6d;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #ff758f;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(255, 77, 109, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Блок для вывода милых подсказок */
+        .hint-message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #ff758f;
+            min-height: 40px;
+            line-height: 1.4;
+            transition: all 0.3s ease;
+        }
+
+        /* --- АНИМАЦИИ --- */
+        
+        /* Тряска при ошибке */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Плавное покачивание иконки при успехе */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            20% { transform: scale(1.2); }
+            40% { transform: scale(1); }
+            60% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .heart-beat {
+            animation: heartbeat 0.8s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-hearts"></div>
+
+    <div class="login-card" id="card">
+        <div class="icon" id="icon">🔒</div>
+        <h2>Доступ ограничен</h2>
+        <p class="subtitle">Пожалуйста, введи свое имя, чтобы подтвердить личность ❤️</p>
+        
+        <div class="input-group">
+            <input type="text" id="nameInput" placeholder="Кто ты, чудо? ✨" autocomplete="off">
+        </div>
+        
+        <button onclick="checkName()">Войти</button>
+        
+        <div class="hint-message" id="hintMessage"></div>
+    </div>
+
+    <script>
+        let errorsCount = 0;
+        const correctName = "любимка";
+
+        // Твоя цепочка милых подсказок
+        const hints = [
+            "Не-а! Подсказка: Я называю тебя так каждый день, Зайчик 🐰",
+            "Хм, мимо. Ладно, первая буква твоего имени — <b>Л</b>",
+            "Ну же! Вторая буква — <b>ю</b> (уже получается <i>Лю...</i>)",
+            "Давай помогу: третья буква — <b>б</b>",
+            "Почти! Четвертая буква — <b>и</b>",
+            "Ну ты чего, капризуля? Пятая буква — <b>м</b>",
+            "Шестая буква — <b>к</b>",
+            "Осталась последняя буква — <b>а</b>! Ну теперь-то введи скорее! 🥰"
+        ];
+
+        function checkName() {
+            const inputField = document.getElementById("nameInput");
+            const userInput = inputField.value.trim().toLowerCase();
+            const hintElement = document.getElementById("hintMessage");
+            const cardElement = document.getElementById("card");
+            const iconElement = document.getElementById("icon");
+
+            // Очищаем предыдущие классы анимации тряски
+            cardElement.classList.remove("shake");
+
+            if (userInput === correctName) {
+                // Если имя ввела правильно
+                hintElement.style.color = "#2d6a4f";
+                hintElement.innerHTML = "Ура! Личность подтверждена.<br>Добро пожаловать, Любимка! ❤️";
+                iconElement.innerText = "💖";
+                iconElement.classList.add("heart-beat");
+                inputField.style.borderColor = "#2d6a4f";
+                
+                // Здесь через 1.5-2 секунды можно сделать переход на основную страницу с письмами
+                setTimeout(() => {
+                    alert("Тут откроется наш основной сайт с письмами и викториной!");
+                }, 1500);
+
+            } else {
+                // Если ошиблась — запускаем тряску формы
+                // Маленький хак с setTimeout, чтобы анимация перезапускалась при каждом клике
+                setTimeout(() => { cardElement.classList.add("shake"); }, 10);
+                
+                iconElement.innerText = "🧐";
+                inputField.style.borderColor = "#ff4d6d";
+                
+                // Выводим подсказки по очереди
+                if (errorsCount < hints.length) {
+                    hintElement.innerHTML = hints[errorsCount];
+                    errorsCount++;
+                } else {
+                    hintElement.innerHTML = "Ну всё, буквы кончились! <br>Слово: <b>Л-Ю-Б-И-М-К-А</b> 💌";
+                }
+            }
+        }
+
+        // Позволяет отправлять форму нажатием на Enter
+        document.getElementById("nameInput").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                checkName();
+            }
+        });
+    </script>
+</body>
+</html>
