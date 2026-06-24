@@ -1,241 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход для Самой Самой ❤️</title>
-    <style>
-        /* Общие нежные стили для фона */
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
-        }
-
-        /* Задний фон с мягкими летающими сердечками (опционально) */
-        .bg-hearts {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        /* Карточка авторизации */
-        .login-card {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(224, 93, 117, 0.15);
-            text-align: center;
-            width: 100%;
-            max-width: 380px;
-            position: relative;
-            z-index: 2;
-            transition: transform 0.3s ease;
-        }
-
-        /* Милая иконка над формой */
-        .icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-            display: inline-block;
-            transition: transform 0.3s ease;
-        }
-
-        h2 {
-            color: #ff4d6d;
-            margin-bottom: 10px;
-            font-size: 24px;
-        }
-
-        p.subtitle {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-
-        /* Поле ввода */
-        .input-group {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #ffe5ec;
-            border-radius: 50px;
-            font-size: 16px;
-            outline: none;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            text-align: center;
-            color: #555;
-        }
-
-        input:focus {
-            border-color: #ff758f;
-            box-shadow: 0 0 10px rgba(255, 117, 143, 0.2);
-        }
-
-        /* Красивая розовая кнопка */
-        button {
-            width: 100%;
-            padding: 15px;
-            background: #ff4d6d;
-            border: none;
-            border-radius: 50px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background: #ff758f;
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(255, 77, 109, 0.4);
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        /* Блок для вывода милых подсказок */
-        .hint-message {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #ff758f;
-            min-height: 40px;
-            line-height: 1.4;
-            transition: all 0.3s ease;
-        }
-
-        /* --- АНИМАЦИИ --- */
-        
-        /* Тряска при ошибке */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-10px); }
-            40%, 80% { transform: translateX(10px); }
-        }
-
-        .shake {
-            animation: shake 0.4s ease-in-out;
-        }
-
-        /* Плавное покачивание иконки при успехе */
-        @keyframes heartbeat {
-            0% { transform: scale(1); }
-            20% { transform: scale(1.2); }
-            40% { transform: scale(1); }
-            60% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .heart-beat {
-            animation: heartbeat 0.8s ease-in-out infinite;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="bg-hearts"></div>
-
-    <div class="login-card" id="card">
-        <div class="icon" id="icon">🔒</div>
-        <h2>Доступ ограничен</h2>
-        <p class="subtitle">Пожалуйста, введи свое имя, чтобы подтвердить личность ❤️</p>
-        
-        <div class="input-group">
-            <input type="text" id="nameInput" placeholder="Кто ты, чудо? ✨" autocomplete="off">
-        </div>
-        
-        <button onclick="checkName()">Войти</button>
-        
-        <div class="hint-message" id="hintMessage"></div>
-    </div>
-
-    <script>
-        let errorsCount = 0;
-        const correctName = "любимка";
-
-        // Твоя цепочка милых подсказок
-        const hints = [
-            "Не-а! Подсказка: Я называю тебя так каждый день, Зайчик 🐰",
-            "Хм, мимо. Ладно, первая буква твоего имени — <b>Л</b>",
-            "Ну же! Вторая буква — <b>ю</b> (уже получается <i>Лю...</i>)",
-            "Давай помогу: третья буква — <b>б</b>",
-            "Почти! Четвертая буква — <b>и</b>",
-            "Ну ты чего, капризуля? Пятая буква — <b>м</b>",
-            "Шестая буква — <b>к</b>",
-            "Осталась последняя буква — <b>а</b>! Ну теперь-то введи скорее! 🥰"
-        ];
-
-        function checkName() {
-            const inputField = document.getElementById("nameInput");
-            const userInput = inputField.value.trim().toLowerCase();
-            const hintElement = document.getElementById("hintMessage");
-            const cardElement = document.getElementById("card");
-            const iconElement = document.getElementById("icon");
-
-            // Очищаем предыдущие классы анимации тряски
-            cardElement.classList.remove("shake");
-
-            if (userInput === correctName) {
-                // Если имя ввела правильно
-                hintElement.style.color = "#2d6a4f";
-                hintElement.innerHTML = "Ура! Личность подтверждена.<br>Добро пожаловать, Любимка! ❤️";
-                iconElement.innerText = "💖";
-                iconElement.classList.add("heart-beat");
-                inputField.style.borderColor = "#2d6a4f";
-                
-                // Здесь через 1.5-2 секунды можно сделать переход на основную страницу с письмами
-                setTimeout(() => {
-                    alert("Тут откроется наш основной сайт с письмами и викториной!");
-                }, 1500);
-
-            } else {
-                // Если ошиблась — запускаем тряску формы
-                // Маленький хак с setTimeout, чтобы анимация перезапускалась при каждом клике
-                setTimeout(() => { cardElement.classList.add("shake"); }, 10);
-                
-                iconElement.innerText = "🧐";
-                inputField.style.borderColor = "#ff4d6d";
-                
-                // Выводим подсказки по очереди
-                if (errorsCount < hints.length) {
-                    hintElement.innerHTML = hints[errorsCount];
-                    errorsCount++;
-                } else {
-                    hintElement.innerHTML = "Ну всё, буквы кончились! <br>Слово: <b>Л-Ю-Б-И-М-К-А</b> 💌";
-                }
-            }
-        }
-
-        // Позволяет отправлять форму нажатием на Enter
-        document.getElementById("nameInput").addEventListener("keyup", function(event) {
-            if (event.key === "Enter") {
-                checkName();
-            }
-        });
-    </script>
-</body>
-</html> -->
-
-
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -252,10 +14,10 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* Карточка (универсальный стиль) */
+        /* Карточка входа */
         .card {
             background: white;
             padding: 40px 30px;
@@ -264,152 +26,184 @@
             text-align: center;
             width: 100%;
             max-width: 380px;
-            position: relative;
-            z-index: 2;
             transition: all 0.5s ease;
         }
 
-        .icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-            display: inline-block;
-        }
-
-        h2 {
-            color: #ff4d6d;
-            margin-bottom: 10px;
-            font-size: 24px;
-        }
-
-        p.subtitle {
-            color: #777;
-            font-size: 14px;
-            margin-bottom: 25px;
-            line-height: 1.4;
-        }
-
+        .icon { font-size: 50px; margin-bottom: 15px; display: inline-block; }
+        h2 { color: #ff4d6d; margin-bottom: 10px; font-size: 24px; }
+        p.subtitle { color: #777; font-size: 14px; margin-bottom: 25px; line-height: 1.4; }
+        
         input {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #ffe5ec;
-            border-radius: 50px;
-            font-size: 16px;
-            outline: none;
-            box-sizing: border-box;
-            transition: all 0.3s ease;
-            text-align: center;
-            color: #555;
-            margin-bottom: 20px;
+            width: 100%; padding: 15px 20px; border: 2px solid #ffe5ec; border-radius: 50px;
+            font-size: 16px; outline: none; box-sizing: border-box; transition: all 0.3s ease;
+            text-align: center; color: #555; margin-bottom: 20px;
         }
-
-        input:focus {
-            border-color: #ff758f;
-            box-shadow: 0 0 10px rgba(255, 117, 143, 0.2);
-        }
-
+        input:focus { border-color: #ff758f; box-shadow: 0 0 10px rgba(255, 117, 143, 0.2); }
+        
         button {
-            width: 100%;
-            padding: 15px;
-            background: #ff4d6d;
-            border: none;
-            border-radius: 50px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
-            transition: all 0.3s ease;
+            width: 100%; padding: 15px; background: #ff4d6d; border: none; border-radius: 50px;
+            color: white; font-size: 16px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3); transition: all 0.3s ease;
+        }
+        button:hover { background: #ff758f; transform: translateY(-2px); }
+
+        .hint-message { margin-top: 20px; font-size: 14px; color: #ff758f; min-height: 40px; line-height: 1.4; }
+
+        /* --- ИГРОВАЯ КАРТА (ЗМЕЙКА) --- */
+        #gameMap {
+            display: none; opacity: 0; transform: scale(0.9);
+            width: 100%; max-width: 450px; padding: 20px; box-sizing: border-box;
         }
 
-        button:hover {
-            background: #ff758f;
-            transform: translateY(-2px);
-            box-shadow: 0 7px 20px rgba(255, 77, 109, 0.4);
+        .snake-container {
+            display: flex; flex-direction: column; align-items: center; gap: 40px;
+            position: relative; margin-top: 30px;
         }
 
-        .hint-message {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #ff758f;
-            min-height: 40px;
-            line-height: 1.4;
+        /* Отрезки дорожки между подарками */
+        .snake-container::before {
+            content: ''; position: absolute; top: 30px; bottom: 30px; width: 6px;
+            background: dashed #ffccd5; z-index: 1;
         }
 
-        /* --- СТИЛИ ДЛЯ ГЛАВНОГО МЕНЮ --- */
-        #mainMenu {
-            display: none; /* Изначально скрыто */
-            opacity: 0;
-            transform: scale(0.9);
+        .gift-node {
+            display: flex; align-items: center; justify-content: center;
+            width: 80px; height: 80px; background: white; border-radius: 50px;
+            font-size: 35px; cursor: pointer; z-index: 2;
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
         }
 
-        .menu-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-top: 20px;
+        /* Эффект змейки (смещение влево-вправо) */
+        .gift-node:nth-child(even) { transform: translateX(-60px); }
+        .gift-node:nth-child(odd) { transform: translateX(60px); }
+        .gift-node:nth-child(1) { transform: translateX(0); }
+
+        /* Состояния подарков */
+        .gift-node.locked {
+            background: #e0e0e0; cursor: not-allowed; opacity: 0.6; box-shadow: none;
+            pointer-events: none;
+        }
+        .gift-node.locked::after { content: '🔒'; position: absolute; font-size: 14px; bottom: 5px; right: 5px; }
+        .gift-node.active { border: 3px solid #ff4d6d; animation: pulse 1.5s infinite; }
+        .gift-node.opened { background: #ffe5ec; border: 2px solid #ff758f; }
+
+        /* Номер шага */
+        .step-badge {
+            position: absolute; top: -10px; left: -10px; background: #ff4d6d;
+            color: white; font-size: 12px; width: 24px; height: 24px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;
         }
 
-        .menu-btn {
-            background: white;
-            color: #ff4d6d;
-            border: 2px solid #ffccd5;
-            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.05);
+        /* --- МОДАЛЬНОЕ ОКНО (ОКНО С ВОПРОСОМ) --- */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); z-index: 10; justify-content: center; align-items: center;
+            backdrop-filter: blur(4px);
         }
-
-        .menu-btn:hover {
-            background: #fff5f7;
-            color: #ff4d6d;
-            border-color: #ff758f;
-            box-shadow: 0 6px 15px rgba(255, 117, 143, 0.15);
+        .modal-content {
+            background: white; padding: 30px; border-radius: 24px; width: 90%; max-width: 360px;
+            text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            animation: popUp 0.3s ease;
         }
-
-        /* --- АНИМАЦИИ --- */
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-10px); }
-            40%, 80% { transform: translateX(10px); }
+        .quiz-options { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+        .option-btn {
+            background: #fff5f7; color: #333; border: 2px solid #ffccd5; padding: 12px;
+            border-radius: 50px; cursor: pointer; font-size: 15px; transition: all 0.2s;
         }
+        .option-btn:hover { background: #ffe5ec; border-color: #ff4d6d; }
+        
+        .surprise-box { display: none; margin-top: 15px; padding: 15px; background: #f0fff4; border-radius: 16px; border: 1px dashed #2d6a4f; }
+        .surprise-box h4 { color: #2d6a4f; margin: 0 0 5px 0; }
+        .surprise-box p { color: #444; font-size: 14px; margin: 0; }
 
+        /* Анимации */
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
         .shake { animation: shake 0.4s ease-in-out; }
-
-        @keyframes heartbeat {
-            0%, 100% { transform: scale(1); }
-            25% { transform: scale(1.15); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.15); }
-        }
-        .heart-beat { animation: heartbeat 1s ease-in-out infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+        @keyframes popUp { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН 1: АВТОРИЗАЦИЯ -->
     <div class="card" id="loginCard">
         <div class="icon" id="icon">🔒</div>
         <h2>Доступ ограничен</h2>
         <p class="subtitle">Пожалуйста, введи свое имя, чтобы подтвердить личность ❤️</p>
-        
         <input type="text" id="nameInput" placeholder="Кто ты, чудо? ✨" autocomplete="off">
         <button onclick="checkName()">Войти</button>
-        
         <div class="hint-message" id="hintMessage"></div>
     </div>
 
-    <!-- ЭКРАН 2: ГЛАВНОЕ МЕНЮ (ПОЯВЛЯЕТСЯ ПОСЛЕ ВХОДА) -->
-    <div class="card" id="mainMenu">
-        <div class="icon" style="animation: heartbeat 1.5s infinite;">💝</div>
-        <h2>Привет, Любимка!</h2>
-        <p class="subtitle">Я так рад, что ты здесь. Я создал это скромное место специально для тебя. Куда заглянем сначала?</p>
+    <div id="gameMap">
+        <h2 style="text-align: center; margin-bottom: 5px;">Карта твоих сюрпризов 🗺️</h2>
+        <p class="subtitle" style="text-align: center; margin-bottom: 20px;">Нажимай на доступные подарки, отвечай на вопросы и забирай призы!</p>
         
-        <div class="menu-buttons">
-            <button class="menu-btn" onclick="openLetters()">💌 Мои письма</button>
-            <button class="menu-btn" onclick="openQuiz()">❓ Викторина</button>
+        <div class="snake-container">
+            <div class="gift-node active" id="gift1" onclick="openStep(1)">
+                <div class="step-badge">1</div>🎁
+            </div>
+            <div class="gift-node locked" id="gift2" onclick="openStep(2)">
+                <div class="step-badge">2</div>🎁
+            </div>
+            <div class="gift-node locked" id="gift3" onclick="openStep(3)">
+                <div class="step-badge">3</div>🎁
+            </div>
+            <div class="gift-node locked" id="gift4" onclick="openStep(4)">
+                <div class="step-badge">4</div>🎁
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="quizModal">
+        <div class="modal-content">
+            <h3 id="modalTitle" style="color: #ff4d6d; margin-top: 0;">Вопрос</h3>
+            <p id="modalQuestion" style="color: #555; font-size: 16px;"></p>
+            
+            <div class="quiz-options" id="quizOptions"></div>
+            
+            <div class="surprise-box" id="surpriseBox">
+                <h4>🎉 Правильно! Твой сюрприз:</h4>
+                <p id="surpriseText"></p>
+                <button onclick="closeModal()" style="margin-top: 15px; padding: 10px; font-size: 14px;">Идти дальше ➔</button>
+            </div>
+            <button id="closeModalBtn" onclick="closeModal()" style="margin-top: 20px; background: #bbb; padding: 10px; font-size: 14px;">Закрыть</button>
         </div>
     </div>
 
     <script>
         let errorsCount = 0;
         const correctName = "любимка";
+        let currentActiveStep = 1;
+
+        // БАЗА ДАННЫХ ДЛЯ ТВОИХ ВОПРОСОВ И СЮРПРИЗОВ
+        const quizData = {
+            1: {
+                question: "Какая твоя привычка умиляет меня больше всего на свете?",
+                options: ["Как ты морщишь носик", "Как ты засыпаешь у меня на плече", "Как ты радуешься вкусняшкам", "Все варианты идеальны!"],
+                correct: 3, // Индекс правильного ответа (начиная с 0)
+                surprise: "Купон на самый нежный массаж после тяжелого дня! И помни — ты у меня невероятная. 💕"
+            },
+            2: {
+                question: "Где мы провели наше лучшее свидание?",
+                options: ["В кино на заднем ряду", "Просто гуляя под дождем", "Там, где мы бесконечно смеялись", "Оно еще впереди!"],
+                correct: 2,
+                surprise: "Письмо: 'Ты — мое главное вдохновение. Твои глаза сияют ярче любых звезд, и я безумно ценю каждый миг с тобой!' 📑"
+            },
+            3: {
+                question: "Сколько раз за день я думаю о тебе?",
+                options: ["Примерно 10 раз", "Только когда скучаю", "Каждую минуту и секунду", "Когда вижу котиков"],
+                correct: 2,
+                surprise: "Купон: 'Билет на любое исполнение твоего каприза (вкусный кофе в постель, заказать твою любимую еду или обнимашки 24/7)!' 🎫"
+            },
+            4: {
+                question: "Готова ли ты прямо сейчас получить самый главный комплимент?",
+                options: ["Да!", "Очень да!", "Я стесняюсь", "Конечно!"],
+                correct: 1,
+                surprise: "Ты — самая красивая, хорошенькая и потрясающая девушка во всей вселенной. Мое сердце бьется только для тебя! Спасибо, что ты есть у меня. С Днем Рождения/Нашим днем! Ты прошла эту змейку! 👑❤️"
+            }
+        };
 
         const hints = [
             "Не-а! Подсказка: Я называю тебя так каждый день, Зайчик 🐰",
@@ -417,9 +211,9 @@
             "Ну же! Вторая буква — <b>ю</b> (уже получается <i>Лю...</i>)",
             "Давай помогу: третья буква — <b>б</b>",
             "Почти! Четвертая буква — <b>и</b>",
-            "Ну ты чего, капризуля? Пятая буква — <b>м</b>",
+            "Ну ты чего? Пятая буква — <b>м</b>",
             "Шестая буква — <b>к</b>",
-            "Осталась последняя буква — <b>а</b>! Ну теперь-то введи скорее! 🥰"
+            "Осталась последняя буква — <b>а</b>! Ну введи скорее! 🥰"
         ];
 
         function checkName() {
@@ -428,61 +222,89 @@
             const hintElement = document.getElementById("hintMessage");
             const loginCard = document.getElementById("loginCard");
             const iconElement = document.getElementById("icon");
-            const mainMenu = document.getElementById("mainMenu");
+            const gameMap = document.getElementById("gameMap");
 
             loginCard.classList.remove("shake");
 
             if (userInput === correctName) {
-                // Эффект успеха
                 hintElement.style.color = "#2d6a4f";
                 hintElement.innerHTML = "Ура! Личность подтверждена! 🥰";
                 iconElement.innerText = "💖";
-                iconElement.classList.add("heart-beat");
-                inputField.style.borderColor = "#2d6a4f";
                 
-                // Плавно переключаем экраны через 1.2 секунды
                 setTimeout(() => {
-                    // Исчезновение карточки входа
                     loginCard.style.opacity = "0";
                     loginCard.style.transform = "scale(0.8)";
-                    
                     setTimeout(() => {
                         loginCard.style.display = "none";
-                        // Появление главного меню
-                        mainMenu.style.display = "block";
-                        setTimeout(() => {
-                            mainMenu.style.opacity = "1";
-                            mainMenu.style.transform = "scale(1)";
-                        }, 50);
+                        gameMap.style.display = "block";
+                        setTimeout(() => { gameMap.style.opacity = "1"; gameMap.style.transform = "scale(1)"; }, 50);
                     }, 400);
-                }, 1200);
-
+                }, 1000);
             } else {
-                // Ошибка
                 setTimeout(() => { loginCard.classList.add("shake"); }, 10);
                 iconElement.innerText = "🧐";
-                inputField.style.borderColor = "#ff4d6d";
-                
-                if (errorsCount < hints.length) {
-                    hintElement.innerHTML = hints[errorsCount];
-                    errorsCount++;
-                } else {
-                    hintElement.innerHTML = "Ну всё, буквы кончились! <br>Слово: <b>Л-Ю-Б-И-М-К-А</b> 💌";
-                }
+                if (errorsCount < hints.length) { hintElement.innerHTML = hints[errorsCount]; errorsCount++; }
+                else { hintElement.innerHTML = "Ну всё, буквы кончились! Слово: <b>Л-Ю-Б-И-М-К-А</b> 💌"; }
             }
         }
 
-        function openLetters() {
-            alert("Здесь откроются твои нежные письма!");
+        function openStep(stepNumber) {
+            const gift = document.getElementById(`gift${stepNumber}`);
+            if (gift.classList.contains('locked')) return;
+
+            const data = quizData[stepNumber];
+            document.getElementById("modalTitle").innerText = `Подарок №${stepNumber} 🎁`;
+            document.getElementById("modalQuestion").innerText = data.question;
+            
+            const optionsContainer = document.getElementById("quizOptions");
+            optionsContainer.innerHTML = "";
+            document.getElementById("surpriseBox").style.display = "none";
+            document.getElementById("closeModalBtn").style.display = "inline-block";
+
+            data.options.forEach((option, index) => {
+                const btn = document.createElement("button");
+                btn.className = "option-btn";
+                btn.innerText = option;
+                btn.onclick = () => checkAnswer(stepNumber, index, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById("quizModal").style.display = "flex";
         }
 
-        function openQuiz() {
-            alert("А здесь начнется викторина!");
+        function checkAnswer(step, selectedIndex, clickedBtn) {
+            const data = quizData[step];
+            if (selectedIndex === data.correct) {
+                // Если ответ верный
+                document.getElementById("quizOptions").innerHTML = "";
+                document.getElementById("closeModalBtn").style.display = "none";
+                document.getElementById("surpriseText").innerText = data.surprise;
+                document.getElementById("surpriseBox").style.display = "block";
+
+                // Отмечаем текущий подарок как открытый
+                const currentGift = document.getElementById(`gift${step}`);
+                currentGift.innerText = "❤️";
+                currentGift.classList.remove("active");
+                currentGift.classList.add("opened");
+
+                // Разблокируем следующий подарок
+                const nextStep = step + 1;
+                const nextGift = document.getElementById(`gift${nextStep}`);
+                if (nextGift && nextGift.classList.contains('locked')) {
+                    nextGift.classList.remove("locked");
+                    nextGift.classList.add("active");
+                    currentActiveStep = nextStep;
+                }
+            } else {
+                // Если ответ неверный
+                clickedBtn.style.background = "#ffccd5";
+                clickedBtn.style.borderColor = "#ff4d6d";
+                clickedBtn.innerText = "❌ Не-а, попробуй еще раз!";
+            }
         }
 
-        document.getElementById("nameInput").addEventListener("keyup", function(event) {
-            if (event.key === "Enter") { checkName(); }
-        });
+        function closeModal() { document.getElementById("quizModal").style.display = "none"; }
+        document.getElementById("nameInput").addEventListener("keyup", function(event) { if (event.key === "Enter") { checkName(); } });
     </script>
 </body>
 </html>
