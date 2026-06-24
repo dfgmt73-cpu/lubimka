@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Волшебная Карта для Любимки ❤️</title>
+    <title>Карта Наших Приключений</title>
     <style>
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
@@ -44,13 +44,12 @@
         button:hover { transform: translateY(-2px); }
 
         .hint-message { margin-top: 15px; font-size: 14px; color: #ff0055; min-height: 30px; font-weight: bold; }
-        .inst-text { text-align: left; background: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 20px; margin-bottom: 20px; font-size: 13.5px; line-height: 1.6; color: #333; }
+        .inst-text { text-align: left; background: rgba(255, 255, 255, 0.7); padding: 20px; border-radius: 20px; margin-bottom: 20px; font-size: 14px; line-height: 1.6; color: #333; }
 
         /* --- ЭКРАН С КАРТОЙ --- */
         #gameScreen {
             display: none; position: relative; width: 100%; height: 100%;
-            /* СЮДА ВСТАВИТСЯ ТВОЕ ФОТО. Пока стоит красивая заглушка */
-            background-image: url('map.png');
+            background-image: url('main.png'); /* Твоя PNG картинка */
             background-size: cover; background-position: center; box-sizing: border-box;
         }
 
@@ -61,10 +60,10 @@
 
         .map-header {
             position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.9); padding: 10px 25px; border-radius: 50px;
+            background: rgba(255, 255, 255, 0.9); padding: 12px 30px; border-radius: 50px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; z-index: 3; width: 80%; max-width: 400px;
         }
-        .map-header h3 { margin: 0; color: #ff007f; font-size: 18px; }
+        .map-header h3 { margin: 0; color: #ff007f; font-size: 20px; letter-spacing: 0.5px; }
 
         /* --- СЕТКА СОЕДИНИТЕЛЬНЫХ ЛИНИЙ (SVG) --- */
         .map-lines {
@@ -84,7 +83,7 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2; font-weight: bold;
         }
 
-        /* Извилистая тропинка по координатам */
+        /* Расположение шагов по экрану (можно менять % для настройки под фото) */
         #gift1 { bottom: 12%; right: 15%; }
         #gift2 { bottom: 28%; right: 38%; } 
         #gift3 { bottom: 15%; left: 25%; }
@@ -134,7 +133,7 @@
 
         .surprise-box { display: none; margin-top: 15px; padding: 15px; background: #f0fff4; border-radius: 18px; border: 2px dashed #2d6a4f; }
         .surprise-box h4 { color: #2d6a4f; margin: 0 0 5px 0; }
-        .surprise-box p { color: #333; font-size: 14px; margin: 0; line-height: 1.4; font-weight: 500; }
+        .surprise-box p { color: #333; font-size: 14px; margin: 0; line-height: 1.5; font-weight: 500; text-align: center; }
 
         @keyframes shake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
         .shake { animation: shake 0.4s ease-in-out; }
@@ -143,7 +142,6 @@
 </head>
 <body>
 
-    <!-- ЭКРАН 1: РЕГИСТРАЦИЯ -->
     <div class="overlay-bg" id="screenLogin">
         <div class="card" id="loginCard">
             <div class="icon" id="icon">🔒</div>
@@ -155,24 +153,22 @@
         </div>
     </div>
 
-    <!-- ЭКРАН 2: ИНСТРУКЦИЯ -->
     <div class="overlay-bg" id="screenInstruction" style="display: none; opacity: 0;">
         <div class="card">
             <div class="icon">📜</div>
-            <h2>Инструкция квеста</h2>
-            <div class="inst-text" id="instText">
-                Тут будет твой личный текст инструкции, который ты пришлешь!<br><br>
-                Пройди по извилистой тропинке, ответь правильно на все вопросы и доберись до центра карты, где тебя ждет Главный Сюрприз!
+            <h2>Инструкция игры</h2>
+            <div class="inst-text">
+                Привет, Любимка! Перед тобой интерактивная игра, состоящая из 7 увлекательных шагов. <br><br>
+                На каждом шаге тебя будут ждать интересные вопросы про нас и нашу историю. Вводи правильные ответы прямо с клавиатуры, чтобы двигаться по тропинке дальше. <br><br>
+                Пройди все шаги до самого конца, и в финале тебя ждет долгожданный <b>супер-приз</b>! Удачи, моя хорошая!
             </div>
-            <button onclick="startGame()">Открыть Карту Сюрпризов ➔</button>
+            <button onclick="startGame()">Открыть Карту Приключений ➔</button>
         </div>
     </div>
 
-    <!-- ЭКРАН 3: ИГРОВАЯ КАРТА С ЛИНИЯМИ -->
     <div id="gameScreen">
         <div class="map-container" id="mapContainer">
             
-            <!-- Слой для прорисовки соединительных линий -->
             <svg class="map-lines" id="svgLines">
                 <path id="line1" class="connection-line"></path>
                 <path id="line2" class="connection-line"></path>
@@ -184,10 +180,9 @@
             </svg>
 
             <div class="map-header">
-                <h3>Карта Твоих Приключений 🗺️</h3>
+                <h3>Карта Наших Приключений</h3>
             </div>
 
-            <!-- Кружочки -->
             <div class="step-node active" id="gift1" onclick="openStep(1)"><div class="step-number">1</div>🎁</div>
             <div class="step-node locked" id="gift2" onclick="openStep(2)"><div class="step-number">2</div>🎁</div>
             <div class="step-node locked" id="gift3" onclick="openStep(3)"><div class="step-number">3</div>🎁</div>
@@ -195,11 +190,9 @@
             <div class="step-node locked" id="gift5" onclick="openStep(5)"><div class="step-number">5</div>🎁</div>
             <div class="step-node locked" id="gift6" onclick="openStep(6)"><div class="step-number">6</div>🎁</div>
             <div class="step-node locked" id="gift7" onclick="openStep(7)"><div class="step-number">7</div>🎁</div>
-            <div class="step-node locked" id="gift8" onclick="openStep(8)">👑</div>
-        </div>
+            <div class="step-node locked" id="gift8" onclick="openStep(8)">🎁</div> </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ ВВОДА ОТВЕТА -->
     <div class="modal" id="quizModal">
         <div class="modal-content" id="modalContent">
             <h3 id="modalTitle" style="color: #ff007f; margin-top: 0; margin-bottom: 5px;">Шаг квеста</h3>
@@ -215,7 +208,7 @@
             <div class="surprise-box" id="surpriseBox">
                 <h4 id="surpriseHeader">🎉 Умничка моя!</h4>
                 <p id="surpriseText"></p>
-                <button onclick="closeModal()" style="margin-top: 15px; padding: 10px; font-size: 13px;">Идти к следующему шагу ➔</button>
+                <button id="nextStepBtn" onclick="closeModal()" style="margin-top: 15px; padding: 10px; font-size: 13px;">Идти к следующему шагу ➔</button>
             </div>
             <button id="closeModalBtn" onclick="closeModal()" style="margin-top: 15px; background: #aaa; padding: 10px; font-size: 13px;">Закрыть</button>
         </div>
@@ -226,62 +219,56 @@
         const correctName = "любимка";
         let currentStepOpen = 1;
 
+        // БАЗА ДАННЫХ ВОПРОСОВ И ОТВЕТОВ
         const quizData = {
             1: { 
                 intro: "Давай разомнемся и ответим на самый легкий вопрос! Наверняка ты помнишь этот день наизусть... 😉",
                 question: "Какого числа мы начали встречаться?", 
                 answers: ["7февраля", "7.02", "07.02"],
                 successMsg: "Умничка моя! 🥰 Первый шаг сделан, разминка прошла идеально. Давай к следующему, дальше будет капельку сложнее!",
-                surprise: "Твое милое письмо или бонус №1." 
+                surprise: "" 
             },
             2: { 
                 intro: "Так, разминка окончена! Давай вспомним наш романтический вечер в честь Дня Влюбленных... 🥂",
                 question: "В каком ресторане мы были 14 февраля?", 
                 answers: ["джиммичу"], 
                 successMsg: "Умничка моя! 😘 Как приятно, что ты помнишь это место. Ну что, готова идти дальше?",
-                surprise: "Твое милое письмо или бонус №2." 
+                surprise: "" 
             },
             3: { 
                 intro: "О-о-о, а это один из моих самых любимых моментов. Сердце тогда билось просто бешено... 🎬🍿",
                 question: "На каком фильме мы первый раз поцеловались?", 
                 answers: ["мартивеликолепный"], 
                 successMsg: "Умничка моя! 💖 Этот поцелуй я не забуду никогда. Ты у меня самая лучшая! Давай к следующему вопросу.",
-                surprise: "Твое милое письмо или бонус №3." 
+                surprise: "" 
             },
             4: { 
                 intro: "Вспоминаем наши спортивные и безумно эмоциональные выходы! Формат ответа: написать счет, пример 0:0 ⚽",
                 question: "Любимка, с каким счетом закончился матч Краснодар : Оренбург, на который мы с тобой ходили?", 
                 answers: ["3:0", "3-0"], 
                 successMsg: "Умничка моя! 🥳 Вот это память! Настоящая болельщица. Погнали дальше по нашей карте!",
-                surprise: "Твое милое письмо или бонус №4." 
+                surprise: "" 
             },
             5: { 
                 intro: "А теперь вопрос на супер-внимательность! Помнишь этот неожиданный и забавный момент? 🌟",
                 question: "Зайчик, в каком месте мы были, когда впервые с тобой встретили известную личность?", 
                 answers: ["золотоеяблоко"], 
                 successMsg: "Умничка моя! 🍏 Угадала! Ты просто невероятная. Осталось совсем чуть-чуть, двигаемся дальше!",
-                surprise: "Твое милое письмо или бонус №5." 
+                surprise: "" 
             },
             6: { 
                 intro: "Загадка на логику! Включаем детективное мышление. Города реальные, но реальность была виртуальной... 🖥️✈️",
                 question: "Любимочка, в каком месте мы бывали с тобой и в Краснодаре, и в Пятигорске, но при этом оба города видели только через экраны?", 
                 answers: ["компьютерныйклуб", "компклуб", "компьютерномклубе"], 
                 successMsg: "Умничка моя! 🎮 Нашлись геймеры! Это было очень круто. Ты у меня самая хорошенькая. Готова к финальному шагу?",
-                surprise: "Твое милое письмо или бонус №6." 
+                surprise: "" 
             },
             7: { 
                 intro: "Почти у цели! Последний шаг перед главным секретом. Наш самый главный символ в переписках... 🫶✨",
                 question: "Котик, какой наш с тобой любимый смайлик?", 
                 answers: ["🫰"], 
                 successMsg: "Умничка моя! 🫰 Именно он! Ты справилась со всеми вопросами. Путь к Супер-Призу открыт! Нажимай скорее!",
-                surprise: "Ты открыла проход в самый центр карты! ❤️" 
-            },
-            8: { 
-                intro: "УРА-А-А! Ты прошла всю карту и доказала, что помнишь каждую детальку нашей истории! 👑✨",
-                question: "Ты готова забрать свой Главный СУПЕР-ПРИЗ?", 
-                answers: ["да", "готова", "даа", "дааа"], 
-                successMsg: "Ты у меня самая лучшая, самая красивая и самая любимая девочка во вселенной! 👑❤️",
-                surprise: "СЮДA ТЫ НАПИШЕШЬ СВОЙ ГЛАВНЫЙ СУПЕР ПРИЗ!" 
+                surprise: "" 
             }
         };
 
@@ -327,12 +314,10 @@
             setTimeout(() => {
                 document.getElementById("screenInstruction").style.display = "none";
                 document.getElementById("gameScreen").style.display = "block";
-                // Рисуем линии сразу после открытия карты
                 setTimeout(drawAllLines, 50);
             }, 400);
         }
 
-        // ФУНКЦИЯ ДЛЯ АВТOМАТИЧЕСКОГО РИСОВАНИЯ ЛИНИЙ МЕЖДУ КРУЖОЧКАМИ
         function drawAllLines() {
             for (let i = 1; i <= 7; i++) {
                 const startNode = document.getElementById(`gift${i}`);
@@ -340,40 +325,49 @@
                 const path = document.getElementById(`line${i}`);
                 
                 if (startNode && endNode && path) {
-                    // Находим центры кружочков
                     const x1 = startNode.offsetLeft + startNode.offsetWidth / 2;
                     const y1 = startNode.offsetTop + startNode.offsetHeight / 2;
                     const x2 = endNode.offsetLeft + endNode.offsetWidth / 2;
                     const y2 = endNode.offsetTop + endNode.offsetHeight / 2;
-                    
-                    // Рисуем красивую прямую линию в SVG
                     path.setAttribute("d", `M ${x1} ${y1} L ${x2} ${y2}`);
                 }
             }
         }
 
-        // Перерисовывать линии, если изменился размер окна
         window.addEventListener('resize', drawAllLines);
 
         function openStep(stepNumber) {
-            const gift = document.getElementById(`gift${stepNumber}`);
-            if (gift.classList.contains('locked')) return;
-
             currentStepOpen = stepNumber;
-            const data = quizData[stepNumber];
-            
-            document.getElementById("modalTitle").innerText = stepNumber === 8 ? "👑 СУПЕР-ПРИЗ" : `Шаг №${stepNumber} 🎁`;
-            document.getElementById("quizIntroText").innerText = data.intro;
-            document.getElementById("modalQuestion").innerText = data.question;
             
             document.getElementById("quizAnswerInput").value = "";
             document.getElementById("quizErrorMsg").innerText = "";
             document.getElementById("surpriseBox").style.display = "none";
-            document.getElementById("inputContainer").style.display = "block";
             document.getElementById("closeModalBtn").style.display = "inline-block";
 
+            // ЕСЛИ ЭТО СУПЕР ПРИЗ (ШАГ 8) - НИКАКОЙ ВИКТОРИНЫ И ВВОДА
+            if (stepNumber === 8) {
+                document.getElementById("modalTitle").innerText = "👑 СУПЕР-ПРИЗ";
+                document.getElementById("quizIntroText").innerText = "Главный подарок ждет тебя внутри...";
+                document.getElementById("modalQuestion").innerText = "";
+                document.getElementById("inputContainer").style.display = "none";
+                
+                // Сразу выводим твой финальный текст
+                document.getElementById("surpriseHeader").innerText = "🎁 Твой подарок:";
+                document.getElementById("surpriseText").innerHTML = "Любимка моя, вот и закончилась наша игра, ты отлично справилась, ты моя умничка, я тебя целую. Завтра мы идем в одно очень интересненькое местечко, в котором мы были 7 марта. Целую любимку. ❤️";
+                document.getElementById("nextStepBtn").style.display = "none"; // Прячем кнопку продолжения, ведь это финал
+                document.getElementById("surpriseBox").style.display = "block";
+            } else {
+                // ДЛЯ ОБЫЧНЫХ ШАГОВ С ВОПРОСАМИ
+                const data = quizData[stepNumber];
+                document.getElementById("modalTitle").innerText = `Шаг №${stepNumber} 🎁`;
+                document.getElementById("quizIntroText").innerText = data.intro;
+                document.getElementById("modalQuestion").innerText = data.question;
+                document.getElementById("inputContainer").style.display = "block";
+                document.getElementById("nextStepBtn").style.display = "inline-block";
+            }
+
             document.getElementById("quizModal").style.display = "flex";
-            document.getElementById("quizAnswerInput").focus();
+            if(stepNumber !== 8) document.getElementById("quizAnswerInput").focus();
         }
 
         function submitAnswer() {
@@ -388,12 +382,12 @@
                 document.getElementById("inputContainer").style.display = "none";
                 document.getElementById("closeModalBtn").style.display = "none";
                 
-                document.getElementById("surpriseHeader").innerText = currentStepOpen === 8 ? "👑 Ты сделала это!" : "🎉 Умничка моя!";
-                document.getElementById("surpriseText").innerHTML = `<b>${data.successMsg}</b><br><br>${data.surprise}`;
+                document.getElementById("surpriseHeader").innerText = "🎉 Умничка моя!";
+                document.getElementById("surpriseText").innerHTML = `<b>${data.successMsg}</b>`;
                 document.getElementById("surpriseBox").style.display = "block";
 
                 const currentGift = document.getElementById(`gift${currentStepOpen}`);
-                currentGift.innerText = currentStepOpen === 8 ? "👑❤️" : "❤️";
+                currentGift.innerText = "❤️";
                 currentGift.classList.remove("active");
                 currentGift.classList.add("opened");
 
