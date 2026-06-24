@@ -11,7 +11,7 @@
             overflow: hidden; display: flex; justify-content: center; align-items: center;
         }
 
-        /* ЭКРАН 1 и 2: Оверлеи */
+        /* ЭКРАНЫ АВТОРИЗАЦИИ И ИНСТРУКЦИИ */
         .overlay-bg {
             position: absolute; width: 100%; height: 100%;
             background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
@@ -46,14 +46,18 @@
         .hint-message { margin-top: 15px; font-size: 14px; color: #ff0055; min-height: 30px; font-weight: bold; }
         .inst-text { text-align: left; background: rgba(255, 255, 255, 0.7); padding: 15px; border-radius: 20px; margin-bottom: 20px; font-size: 13.5px; line-height: 1.6; color: #333; }
 
-        /* --- ЭКРАН 3: КАРТА НА ВЕСЬ ЭКРАН --- */
+        /* --- ЭКРАН С КАРТОЙ --- */
         #gameScreen {
             display: none; position: relative; width: 100%; height: 100%;
-            background-image: url('https://img.freepik.com/free-vector/fairy-tale-landscape-concept_23-2148467246.jpg');
+            /* СЮДА ВСТАВИТСЯ ТВОЕ ФОТО. Пока стоит красивая заглушка */
+            background-image: url('map.png');
             background-size: cover; background-position: center; box-sizing: border-box;
         }
 
-        .map-container { position: relative; width: 100%; height: 100%; max-width: 1024px; max-height: 768px; margin: 0 auto; }
+        .map-container { 
+            position: relative; width: 100%; height: 100%; 
+            max-width: 1024px; max-height: 768px; margin: 0 auto; 
+        }
 
         .map-header {
             position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
@@ -61,7 +65,16 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; z-index: 3; width: 80%; max-width: 400px;
         }
         .map-header h3 { margin: 0; color: #ff007f; font-size: 18px; }
-        .map-header p { margin: 3px 0 0 0; font-size: 11px; color: #555; }
+
+        /* --- СЕТКА СОЕДИНИТЕЛЬНЫХ ЛИНИЙ (SVG) --- */
+        .map-lines {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1;
+        }
+        .connection-line {
+            stroke: #ff007f; stroke-width: 4; stroke-dasharray: 8, 8;
+            fill: none; stroke-linecap: round; opacity: 0.7;
+        }
 
         /* --- КРУЖОЧКИ ШАГОВ --- */
         .step-node {
@@ -71,16 +84,18 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2; font-weight: bold;
         }
 
+        /* Извилистая тропинка по координатам */
         #gift1 { bottom: 12%; right: 15%; }
-        #gift2 { bottom: 25%; right: 40%; } 
+        #gift2 { bottom: 28%; right: 38%; } 
         #gift3 { bottom: 15%; left: 25%; }
-        #gift4 { top: 50%; left: 12%; }
-        #gift5 { top: 25%; left: 30%; }
-        #gift6 { top: 20%; right: 35%; }
-        #gift7 { top: 45%; right: 18%; }
+        #gift4 { top: 52%; left: 15%; }
+        #gift5 { top: 25%; left: 32%; }
+        #gift6 { top: 22%; right: 35%; }
+        #gift7 { top: 48%; right: 20%; }
         
+        /* Супер-приз */
         #gift8 {
-            top: 45%; left: 50%; transform: translate(-50%, -50%);
+            top: 48%; left: 50%; transform: translate(-50%, -50%);
             width: 85px; height: 85px; font-size: 42px;
             background: linear-gradient(45deg, #ffb703, #ff007f);
         }
@@ -102,7 +117,7 @@
             100% { transform: scale(1); }
         }
 
-        /* --- МОДАЛЬНОЕ ОКНО --- */
+        /* МОДАЛЬНОЕ ОКНО */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.6); z-index: 10; justify-content: center; align-items: center;
@@ -147,20 +162,32 @@
             <h2>Инструкция квеста</h2>
             <div class="inst-text" id="instText">
                 Тут будет твой личный текст инструкции, который ты пришлешь!<br><br>
-                Например: Пройди по извилистой тропинке сказочного королевства, открой все 7 секретных подарков и доберись до центра карты, где тебя ждет главный сюрприз!
+                Пройди по извилистой тропинке, ответь правильно на все вопросы и доберись до центра карты, где тебя ждет Главный Сюрприз!
             </div>
-            <button onclick="startGame()">Открыть Карту Сокровищ ➔</button>
+            <button onclick="startGame()">Открыть Карту Сюрпризов ➔</button>
         </div>
     </div>
 
-    <!-- ЭКРАН 3: ИГРОВАЯ КАРТА -->
+    <!-- ЭКРАН 3: ИГРОВАЯ КАРТА С ЛИНИЯМИ -->
     <div id="gameScreen">
-        <div class="map-container">
+        <div class="map-container" id="mapContainer">
+            
+            <!-- Слой для прорисовки соединительных линий -->
+            <svg class="map-lines" id="svgLines">
+                <path id="line1" class="connection-line"></path>
+                <path id="line2" class="connection-line"></path>
+                <path id="line3" class="connection-line"></path>
+                <path id="line4" class="connection-line"></path>
+                <path id="line5" class="connection-line"></path>
+                <path id="line6" class="connection-line"></path>
+                <path id="line7" class="connection-line"></path>
+            </svg>
+
             <div class="map-header">
                 <h3>Карта Твоих Приключений 🗺️</h3>
-                <p>Нажимай на активные кружочки, вводи ответы и двигайся к центру!</p>
             </div>
 
+            <!-- Кружочки -->
             <div class="step-node active" id="gift1" onclick="openStep(1)"><div class="step-number">1</div>🎁</div>
             <div class="step-node locked" id="gift2" onclick="openStep(2)"><div class="step-number">2</div>🎁</div>
             <div class="step-node locked" id="gift3" onclick="openStep(3)"><div class="step-number">3</div>🎁</div>
@@ -176,7 +203,7 @@
     <div class="modal" id="quizModal">
         <div class="modal-content" id="modalContent">
             <h3 id="modalTitle" style="color: #ff007f; margin-top: 0; margin-bottom: 5px;">Шаг квеста</h3>
-            <div class="quiz-intro-text" id="quizIntroText">Подпись к вопросу</div>
+            <div class="quiz-intro-text" id="quizIntroText">Подпись</div>
             <p id="modalQuestion" style="color: #333; font-size: 16px; font-weight: 600; margin-bottom: 15px;"></p>
             
             <div id="inputContainer">
@@ -199,14 +226,13 @@
         const correctName = "любимка";
         let currentStepOpen = 1;
 
-        // БАЗА ДАННЫХ ВОПРОСОВ, ПОДПИСЕЙ И ОТВЕТОВ
         const quizData = {
             1: { 
                 intro: "Давай разомнемся и ответим на самый легкий вопрос! Наверняка ты помнишь этот день наизусть... 😉",
                 question: "Какого числа мы начали встречаться?", 
-                answers: ["7февраля", "7.02", "07.02"], // Варианты правильного ввода (без пробелов для точной проверки)
+                answers: ["7февраля", "7.02", "07.02"],
                 successMsg: "Умничка моя! 🥰 Первый шаг сделан, разминка прошла идеально. Давай к следующему, дальше будет капельку сложнее!",
-                surprise: "Твое милое письмо или бонус №1 (можешь вписать сюда текст)." 
+                surprise: "Твое милое письмо или бонус №1." 
             },
             2: { 
                 intro: "Так, разминка окончена! Давай вспомним наш романтический вечер в честь Дня Влюбленных... 🥂",
@@ -246,16 +272,16 @@
             7: { 
                 intro: "Почти у цели! Последний шаг перед главным секретом. Наш самый главный символ в переписках... 🫶✨",
                 question: "Котик, какой наш с тобой любимый смайлик?", 
-                answers: ["🫰"], // Поддерживает смайлик
+                answers: ["🫰"], 
                 successMsg: "Умничка моя! 🫰 Именно он! Ты справилась со всеми вопросами. Путь к Супер-Призу открыт! Нажимай скорее!",
                 surprise: "Ты открыла проход в самый центр карты! ❤️" 
             },
             8: { 
                 intro: "УРА-А-А! Ты прошла всю карту и доказала, что помнишь каждую детальку нашей истории! 👑✨",
-                question: "Ты готова забрать свой Главный Супер-Приз?", 
+                question: "Ты готова забрать свой Главный СУПЕР-ПРИЗ?", 
                 answers: ["да", "готова", "даа", "дааа"], 
                 successMsg: "Ты у меня самая лучшая, самая красивая и самая любимая девочка во вселенной! 👑❤️",
-                surprise: "СЮДA ТЫ НАПИШЕШЬ СВОЙ ГЛАВНЫЙ СУПЕР ПРИЗ (например: 'Посмотри под подушку' или твое самое большое и нежное любовное письмо)!" 
+                surprise: "СЮДA ТЫ НАПИШЕШЬ СВОЙ ГЛАВНЫЙ СУПЕР ПРИЗ!" 
             }
         };
 
@@ -275,14 +301,12 @@
             const userInput = inputField.value.trim().toLowerCase();
             const hintElement = document.getElementById("hintMessage");
             const loginCard = document.getElementById("loginCard");
-            const iconElement = document.getElementById("icon");
 
             loginCard.classList.remove("shake");
 
             if (userInput === correctName) {
                 hintElement.style.color = "#2d6a4f";
                 hintElement.innerHTML = "Личность подтверждена! 🥰";
-                iconElement.innerText = "💖";
                 setTimeout(() => {
                     document.getElementById("screenLogin").style.opacity = "0";
                     setTimeout(() => {
@@ -293,9 +317,8 @@
                 }, 1000);
             } else {
                 setTimeout(() => { loginCard.classList.add("shake"); }, 10);
-                iconElement.innerText = "🧐";
                 if (errorsCount < hints.length) { hintElement.innerHTML = hints[errorsCount]; errorsCount++; }
-                else { hintElement.innerHTML = "Ну всё, буквы кончились! Слово: <b>Л-Ю-Б-И-М-К-А</b> 💌"; }
+                else { hintElement.innerHTML = "Слово: <b>Л-Ю-Б-И-М-К-А</b> 💌"; }
             }
         }
 
@@ -304,8 +327,33 @@
             setTimeout(() => {
                 document.getElementById("screenInstruction").style.display = "none";
                 document.getElementById("gameScreen").style.display = "block";
+                // Рисуем линии сразу после открытия карты
+                setTimeout(drawAllLines, 50);
             }, 400);
         }
+
+        // ФУНКЦИЯ ДЛЯ АВТOМАТИЧЕСКОГО РИСОВАНИЯ ЛИНИЙ МЕЖДУ КРУЖОЧКАМИ
+        function drawAllLines() {
+            for (let i = 1; i <= 7; i++) {
+                const startNode = document.getElementById(`gift${i}`);
+                const endNode = document.getElementById(`gift${i+1}`);
+                const path = document.getElementById(`line${i}`);
+                
+                if (startNode && endNode && path) {
+                    // Находим центры кружочков
+                    const x1 = startNode.offsetLeft + startNode.offsetWidth / 2;
+                    const y1 = startNode.offsetTop + startNode.offsetHeight / 2;
+                    const x2 = endNode.offsetLeft + endNode.offsetWidth / 2;
+                    const y2 = endNode.offsetTop + endNode.offsetHeight / 2;
+                    
+                    // Рисуем красивую прямую линию в SVG
+                    path.setAttribute("d", `M ${x1} ${y1} L ${x2} ${y2}`);
+                }
+            }
+        }
+
+        // Перерисовывать линии, если изменился размер окна
+        window.addEventListener('resize', drawAllLines);
 
         function openStep(stepNumber) {
             const gift = document.getElementById(`gift${stepNumber}`);
@@ -314,11 +362,10 @@
             currentStepOpen = stepNumber;
             const data = quizData[stepNumber];
             
-            document.getElementById("modalTitle").innerText = stepNumber === 8 ? "👑 ГЛАВНЫЙ СУПЕР-ПРИЗ" : `Шаг №${stepNumber} 🎁`;
+            document.getElementById("modalTitle").innerText = stepNumber === 8 ? "👑 СУПЕР-ПРИЗ" : `Шаг №${stepNumber} 🎁`;
             document.getElementById("quizIntroText").innerText = data.intro;
             document.getElementById("modalQuestion").innerText = data.question;
             
-            // Сброс полей
             document.getElementById("quizAnswerInput").value = "";
             document.getElementById("quizErrorMsg").innerText = "";
             document.getElementById("surpriseBox").style.display = "none";
@@ -335,12 +382,9 @@
             const modalContent = document.getElementById("modalContent");
             
             modalContent.classList.remove("shake");
-
-            // Проверка ответа (убираем пробелы у ввода для надежности сравнения)
             const isCorrect = data.answers.some(ans => userInput === ans.toLowerCase().replace(/\s+/g, ''));
 
             if (isCorrect) {
-                // ПРАВИЛЬНО
                 document.getElementById("inputContainer").style.display = "none";
                 document.getElementById("closeModalBtn").style.display = "none";
                 
@@ -348,13 +392,11 @@
                 document.getElementById("surpriseText").innerHTML = `<b>${data.successMsg}</b><br><br>${data.surprise}`;
                 document.getElementById("surpriseBox").style.display = "block";
 
-                // Анимация на карте
                 const currentGift = document.getElementById(`gift${currentStepOpen}`);
                 currentGift.innerText = currentStepOpen === 8 ? "👑❤️" : "❤️";
                 currentGift.classList.remove("active");
                 currentGift.classList.add("opened");
 
-                // Открываем следующий шаг
                 const nextStep = currentStepOpen + 1;
                 const nextGift = document.getElementById(`gift${nextStep}`);
                 if (nextGift && nextGift.classList.contains('locked')) {
@@ -362,21 +404,15 @@
                     nextGift.classList.add("active");
                 }
             } else {
-                // НЕПРАВИЛЬНО
                 setTimeout(() => { modalContent.classList.add("shake"); }, 10);
-                document.getElementById("quizErrorMsg").innerText = "❌ Не-а, ответ неверный или опечатка! Попробуй еще раз, котик.";
+                document.getElementById("quizErrorMsg").innerText = "❌ Не-а, ответ неверный! Попробуй еще раз, котик.";
             }
         }
 
         function closeModal() { document.getElementById("quizModal").style.display = "none"; }
         
-        // Клик по Enter в поле ответа
-        document.getElementById("quizAnswerInput").addEventListener("keyup", function(event) {
-            if (event.key === "Enter") { submitAnswer(); }
-        });
-        document.getElementById("nameInput").addEventListener("keyup", function(event) {
-            if (event.key === "Enter") { checkName(); }
-        });
+        document.getElementById("quizAnswerInput").addEventListener("keyup", function(event) { if (event.key === "Enter") { submitAnswer(); } });
+        document.getElementById("nameInput").addEventListener("keyup", function(event) { if (event.key === "Enter") { checkName(); } });
     </script>
 </body>
 </html>
