@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -229,6 +229,259 @@
             if (event.key === "Enter") {
                 checkName();
             }
+        });
+    </script>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для Моей Самой Самой ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffc2d1 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Карточка (универсальный стиль) */
+        .card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(224, 93, 117, 0.15);
+            text-align: center;
+            width: 100%;
+            max-width: 380px;
+            position: relative;
+            z-index: 2;
+            transition: all 0.5s ease;
+        }
+
+        .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        h2 {
+            color: #ff4d6d;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        p.subtitle {
+            color: #777;
+            font-size: 14px;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ffe5ec;
+            border-radius: 50px;
+            font-size: 16px;
+            outline: none;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        input:focus {
+            border-color: #ff758f;
+            box-shadow: 0 0 10px rgba(255, 117, 143, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #ff4d6d;
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #ff758f;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(255, 77, 109, 0.4);
+        }
+
+        .hint-message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #ff758f;
+            min-height: 40px;
+            line-height: 1.4;
+        }
+
+        /* --- СТИЛИ ДЛЯ ГЛАВНОГО МЕНЮ --- */
+        #mainMenu {
+            display: none; /* Изначально скрыто */
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .menu-btn {
+            background: white;
+            color: #ff4d6d;
+            border: 2px solid #ffccd5;
+            box-shadow: 0 4px 10px rgba(255, 77, 109, 0.05);
+        }
+
+        .menu-btn:hover {
+            background: #fff5f7;
+            color: #ff4d6d;
+            border-color: #ff758f;
+            box-shadow: 0 6px 15px rgba(255, 117, 143, 0.15);
+        }
+
+        /* --- АНИМАЦИИ --- */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
+        .shake { animation: shake 0.4s ease-in-out; }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.15); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.15); }
+        }
+        .heart-beat { animation: heartbeat 1s ease-in-out infinite; }
+    </style>
+</head>
+<body>
+
+    <!-- ЭКРАН 1: АВТОРИЗАЦИЯ -->
+    <div class="card" id="loginCard">
+        <div class="icon" id="icon">🔒</div>
+        <h2>Доступ ограничен</h2>
+        <p class="subtitle">Пожалуйста, введи свое имя, чтобы подтвердить личность ❤️</p>
+        
+        <input type="text" id="nameInput" placeholder="Кто ты, чудо? ✨" autocomplete="off">
+        <button onclick="checkName()">Войти</button>
+        
+        <div class="hint-message" id="hintMessage"></div>
+    </div>
+
+    <!-- ЭКРАН 2: ГЛАВНОЕ МЕНЮ (ПОЯВЛЯЕТСЯ ПОСЛЕ ВХОДА) -->
+    <div class="card" id="mainMenu">
+        <div class="icon" style="animation: heartbeat 1.5s infinite;">💝</div>
+        <h2>Привет, Любимка!</h2>
+        <p class="subtitle">Я так рад, что ты здесь. Я создал это скромное место специально для тебя. Куда заглянем сначала?</p>
+        
+        <div class="menu-buttons">
+            <button class="menu-btn" onclick="openLetters()">💌 Мои письма</button>
+            <button class="menu-btn" onclick="openQuiz()">❓ Викторина</button>
+        </div>
+    </div>
+
+    <script>
+        let errorsCount = 0;
+        const correctName = "любимка";
+
+        const hints = [
+            "Не-а! Подсказка: Я называю тебя так каждый день, Зайчик 🐰",
+            "Хм, мимо. Ладно, первая буква твоего имени — <b>Л</b>",
+            "Ну же! Вторая буква — <b>ю</b> (уже получается <i>Лю...</i>)",
+            "Давай помогу: третья буква — <b>б</b>",
+            "Почти! Четвертая буква — <b>и</b>",
+            "Ну ты чего, капризуля? Пятая буква — <b>м</b>",
+            "Шестая буква — <b>к</b>",
+            "Осталась последняя буква — <b>а</b>! Ну теперь-то введи скорее! 🥰"
+        ];
+
+        function checkName() {
+            const inputField = document.getElementById("nameInput");
+            const userInput = inputField.value.trim().toLowerCase();
+            const hintElement = document.getElementById("hintMessage");
+            const loginCard = document.getElementById("loginCard");
+            const iconElement = document.getElementById("icon");
+            const mainMenu = document.getElementById("mainMenu");
+
+            loginCard.classList.remove("shake");
+
+            if (userInput === correctName) {
+                // Эффект успеха
+                hintElement.style.color = "#2d6a4f";
+                hintElement.innerHTML = "Ура! Личность подтверждена! 🥰";
+                iconElement.innerText = "💖";
+                iconElement.classList.add("heart-beat");
+                inputField.style.borderColor = "#2d6a4f";
+                
+                // Плавно переключаем экраны через 1.2 секунды
+                setTimeout(() => {
+                    // Исчезновение карточки входа
+                    loginCard.style.opacity = "0";
+                    loginCard.style.transform = "scale(0.8)";
+                    
+                    setTimeout(() => {
+                        loginCard.style.display = "none";
+                        // Появление главного меню
+                        mainMenu.style.display = "block";
+                        setTimeout(() => {
+                            mainMenu.style.opacity = "1";
+                            mainMenu.style.transform = "scale(1)";
+                        }, 50);
+                    }, 400);
+                }, 1200);
+
+            } else {
+                // Ошибка
+                setTimeout(() => { loginCard.classList.add("shake"); }, 10);
+                iconElement.innerText = "🧐";
+                inputField.style.borderColor = "#ff4d6d";
+                
+                if (errorsCount < hints.length) {
+                    hintElement.innerHTML = hints[errorsCount];
+                    errorsCount++;
+                } else {
+                    hintElement.innerHTML = "Ну всё, буквы кончились! <br>Слово: <b>Л-Ю-Б-И-М-К-А</b> 💌";
+                }
+            }
+        }
+
+        function openLetters() {
+            alert("Здесь откроются твои нежные письма!");
+        }
+
+        function openQuiz() {
+            alert("А здесь начнется викторина!");
+        }
+
+        document.getElementById("nameInput").addEventListener("keyup", function(event) {
+            if (event.key === "Enter") { checkName(); }
         });
     </script>
 </body>
